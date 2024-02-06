@@ -16,7 +16,7 @@ def main():
                  "type": "enum",
                  "name": "event",
                  "symbols": [
-                     "PLAY", "PAUSE", "SKIP"
+                     "PLAY", "PAUSE", "SKIP", "LIKE", "DOWNLOAD", "ADD TO PLAYLIST"
                  ]},
                 "default": "PLAY"},
             {"name": "track_id", "type": "long"},
