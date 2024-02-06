@@ -1,4 +1,4 @@
-from avro import parse_schema
+from fastavro import parse_schema
 
 
 def main():
@@ -9,11 +9,16 @@ def main():
         "type": "record",
         "fields": [
             {"name": "id", "type": "long"},
-            {"name": "timestamp", "type": "string", 
+            {"name": "timestamp", "type": "string",
              "logicalType": "timestamp-millis"},
-            {"name": "action", 
-             "type": "enum",
-             "symbols" : ["PLAY", "PAUSE", "SKIP"]},
+            {"name": "action",
+             "type": {
+                 "type": "enum",
+                 "name": "event",
+                 "symbols": [
+                     "PLAY", "PAUSE", "SKIP"
+                 ]},
+                "default": "PLAY"},
             {"name": "track_id", "type": "long"},
             {"name": "user_id", "type": "long"}
         ]
@@ -27,13 +32,11 @@ def main():
         "fields": [
             {"name": "user_id", "type": "long"},
             {"name": "username", "type": "string"},
-            {"name": "location", "type": "string"}, # country of creation of account
-            {"name": "birthdate", "type": "string", 
-             "logicalType": "date"},
-            {"name": "gender", "type": "string", 
-             "symbols": ["M", "F", "O"]},
-            {"name": "favorite_genre", "type": "array",
-             "items": "string", "default": []}
+            {"name": "location", "type": "string"},
+            {"name": "birthdate", "type": "string", "logicalType": "date"},
+            {"name": "gender", "type": "string", "symbols": ["M", "F", "O"]},
+            {"name": "favorite_genre", "type": {
+                "type": "array", "items": "string"}, "default": []}
         ]
     }
 
@@ -44,7 +47,7 @@ def main():
         "type": "record",
         "fields": [
             {"name": "track_id", "type": "long"},
-            {"name": "duration", "type": "int"}, # (in seconds)
+            {"name": "duration", "type": "int"},  # (in seconds)
             {"name": "artist", "type": "string"},
             {"name": "genre", "type": "string"}
         ]
@@ -57,6 +60,7 @@ def main():
     print(parsed_event_schema)
     print(parsed_user_schema)
     print(parsed_track_schema)
+
 
 if __name__ == "__main__":
     main()
