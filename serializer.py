@@ -1,11 +1,7 @@
 from fastavro import parse_schema
 
 
-<<<<<<< HEAD
 def get_parsed_event_schema():
-=======
-def main():
->>>>>>> faa017a5e0e215ffb7686fc12b648020b142b485
     event_schema = {
         "doc": "Spotify Wrapped Data Feed - User Event",
         "name": "UserEvent",
@@ -14,33 +10,20 @@ def main():
         "fields": [
             {"name": "id", "type": "long"},
             {"name": "timestamp", "type": "string",
-<<<<<<< HEAD
                 "logicalType": "timestamp-millis"},
             {"name": "action", "type": {"type": "enum", "name": "event",
-                                        "symbols": ["PLAY", "PAUSE", "SKIP", "LIKE"], "default": "PLAY"}},
-=======
-             "logicalType": "timestamp-millis"},
-            {"name": "action",
-             "type": {
-                 "type": "enum",
-                 "name": "event",
-                 "symbols": [
-                     "PLAY", "PAUSE", "SKIP", "LIKE", "DOWNLOAD", "ADD TO PLAYLIST"
-                 ]},
-                "default": "PLAY"},
->>>>>>> faa017a5e0e215ffb7686fc12b648020b142b485
+                                        "symbols": ["PLAY", "PAUSE", "SKIP", 
+                                                    "LIKE", "DOWNLOAD", "ADD TO PLAYLIST"], 
+                                        "default": "PLAY"}},
             {"name": "track_id", "type": "long"},
             {"name": "user_id", "type": "long"}
         ]
     }
 
-<<<<<<< HEAD
     return parse_schema(event_schema)
 
 
 def get_parsed_user_schema():
-=======
->>>>>>> faa017a5e0e215ffb7686fc12b648020b142b485
     user_schema = {
         "doc": "Spotify Wrapped Data Feed - User Info",
         "name": "User",
@@ -51,26 +34,22 @@ def get_parsed_user_schema():
             {"name": "username", "type": "string"},
             {"name": "location", "type": "string"},
             {"name": "birthdate", "type": "string", "logicalType": "date"},
-            {"name": "gender", "type": "string", "symbols": ["M", "F", "O"]},
+            {"name": "gender", "type": "string", "symbols": ["M", "F"]},
             {"name": "favorite_genre", "type": {
                 "type": "array", "items": "string"}, "default": []}
         ]
     }
 
-<<<<<<< HEAD
     return parse_schema(user_schema)
 
 
 def get_parsed_track_schema():
-=======
->>>>>>> faa017a5e0e215ffb7686fc12b648020b142b485
     track_schema = {
         "doc": "Spotify Wrapped Data Feed - Track Info",
         "name": "Track",
         "namespace": "com.spotify.wrapped",
         "type": "record",
         "fields": [
-<<<<<<< HEAD
             {"name": "track_id", "type": "string"},
             {"name": "duration", "type": "int", "default": 0},
             {"name": "artist", "type": "string"}
@@ -92,27 +71,8 @@ def print_parsed_schemas():
     print(parsed_user_schema)
 
     print("\nParsed Track Schema:")
-=======
-            {"name": "track_id", "type": "long"},
-            {"name": "duration", "type": "int"},  # (in seconds)
-            {"name": "artist", "type": "string"},
-            {"name": "genre", "type": "string"}
-        ]
-    }
-
-    parsed_event_schema = parse_schema(event_schema)
-    parsed_user_schema = parse_schema(user_schema)
-    parsed_track_schema = parse_schema(track_schema)
-
-    print(parsed_event_schema)
-    print(parsed_user_schema)
->>>>>>> faa017a5e0e215ffb7686fc12b648020b142b485
     print(parsed_track_schema)
 
 
 if __name__ == "__main__":
-<<<<<<< HEAD
     print_parsed_schemas()
-=======
-    main()
->>>>>>> faa017a5e0e215ffb7686fc12b648020b142b485
