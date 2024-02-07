@@ -61,7 +61,8 @@ def serialize_song_data(tracks_path:str, output_path):
     df_tracks = df_tracks_full[columns_to_keep]
 
     df_tracks = df_tracks.dropna(subset=['id'])
-    df_tracks = df_tracks.rename(columns={'id': 'track_id'})
+    df_tracks = df_tracks.rename(columns={'id': 'track_id',
+                                          'duration_ms': 'duration'})
     df_tracks['track_id'] = df_tracks['track_id'].astype('str')
     df_tracks['artist'] = df_tracks['artists'].str.strip()
     df_tracks = df_tracks.dropna(subset=['artist'])
