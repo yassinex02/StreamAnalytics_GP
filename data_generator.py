@@ -17,15 +17,17 @@ def generate_random_birthdates(min_date:datetime, max_date:datetime, n_dates:int
         birthdate = min_date + timedelta(days=days_offset)
         birthdates.append(birthdate.strftime('%Y-%m-%d'))
 
+    return birthdates
+
 
 def generate_fake_users(n_users:int):
     fake = Faker()
     usernames_list = [fake.user_name() for _ in range(n_users)]
     locations_list = [fake.country() for _ in range(n_users)]
-    birthdates_list = generate_random_birthdates(min_date=datetime(1970,1,1),
+    birthdates_list = generate_random_birthdates(min_date=datetime(1980,1,1),
                                             max_date=datetime(2011,1,1),
                                             n_dates=n_users)
-    genders_list = [random.choice(["M", "F"] for _ in range(n_users))]
+    genders_list = [random.choice(["M", "F"]) for _ in range(n_users)]
 
     users = {"usernames": usernames_list, "locations": locations_list,
              "birthdates": birthdates_list, "genders": genders_list}
@@ -70,7 +72,7 @@ def serialize_song_data(tracks_path:str, output_path):
 
 
 def main():
-    #serialize_song_data(tracks_path="data/tracks.csv", output_path="data/tracks.avro")
+    serialize_song_data(tracks_path="data/tracks.csv", output_path="data/tracks.avro")
     users = generate_fake_users(100)
     serialize_user_data(users, output_path="data/users.avro")
     
