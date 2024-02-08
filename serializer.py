@@ -13,7 +13,7 @@ def get_parsed_event_schema():
                 "logicalType": "timestamp-millis"},
             {"name": "action", "type": {"type": "enum", "name": "event",
                                         "symbols": ["PLAY", "PAUSE", "SKIP", "QUIT",
-                                                    "LIKE", "DOWNLOAD", "ADD_TO_PLAYLIST"], 
+                                                    "LIKE", "DOWNLOAD", "ADD_TO_PLAYLIST"],
                                         "default": "PLAY"}},
             {"name": "track_id", "type": "string"},
             {"name": "user_id", "type": "long"}
@@ -42,6 +42,8 @@ def get_parsed_user_schema():
 
     return parse_schema(user_schema)
 
+# TAKIG EVRTH TO GENERATE THE PERSONALITIES
+
 
 def get_parsed_track_schema():
     track_schema = {
@@ -52,7 +54,23 @@ def get_parsed_track_schema():
         "fields": [
             {"name": "track_id", "type": "string"},
             {"name": "duration", "type": "int", "default": 0},
-            {"name": "artist", "type": "string"}
+            {"name": "artist", "type": "string"},
+            {"name": "name", "type": ["null", "string"], "default": None},
+            {"name": "popularity", "type": ["null", "int"], "default": None},
+            {"name": "release_date", "type": [
+                "null", "string"], "default": None},
+            {"name": "danceability", "type": "float", "default": 0.0},
+            {"name": "energy", "type": "float", "default": 0.0},
+            {"name": "key", "type": "int", "default": 0},
+            {"name": "loudness", "type": "float", "default": 0.0},
+            {"name": "mode", "type": "int", "default": 0},
+            {"name": "speechiness", "type": "float", "default": 0.0},
+            {"name": "acousticness", "type": "float", "default": 0.0},
+            {"name": "instrumentalness", "type": "float", "default": 0.0},
+            {"name": "liveness", "type": "float", "default": 0.0},
+            {"name": "valence", "type": "float", "default": 0.0},
+            {"name": "tempo", "type": "float", "default": 0.0},
+            {"name": "time_signature", "type": "int", "default": 0}
         ]
     }
 
