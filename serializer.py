@@ -15,7 +15,7 @@ def get_parsed_event_schema():
                                         "symbols": ["PLAY", "PAUSE", "SKIP", "QUIT",
                                                     "LIKE", "DOWNLOAD", "ADD_TO_PLAYLIST"], 
                                         "default": "PLAY"}},
-            {"name": "track_id", "type": "long"},
+            {"name": "track_id", "type": "string"},
             {"name": "user_id", "type": "long"}
         ]
     }
