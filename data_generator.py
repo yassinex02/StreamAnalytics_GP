@@ -3,6 +3,7 @@ import random
 
 from faker import Faker
 from fastavro import writer
+import numpy as np
 import pandas as pd
 from serializer import get_parsed_track_schema, get_parsed_user_schema
 
@@ -75,10 +76,36 @@ def serialize_song_data(tracks_path:str, output_path):
 class User():
     def __init__(self, user_id, tracks) -> None:
         self.actions = ["PLAY", "PAUSE", "SKIP", "QUIT", "LIKE", "DOWNLOAD", "ADD TO PLAYLIST"]
+        # actions to remove from available actions if same as previous action (user can't quit/pause twice in a row)
         self.simulation_actions = ["PLAY", "PAUSE", "QUIT"]
-        self.user_id = user_id
+        self.user_id = user_id                                   
         self.previous_action = random.choice(self.simulation_actions)
         self.tracks = tracks
+        self.average_n_actions = np.random.normal(100, 25) # average number of daily events for user
+        self.std_dev_n_actions = random.randint(10, 30)
+
+    def get_action(self):
+        if self.previous_action == "PAUSE":
+            actions = self.actions.remove("PAUSE")
+        elif self.previous_action == "QUIT":
+            actions = self.actions.remove("QUIT")
+        else:
+            actions = self.actions
+        
+        action = random.choice(actions)
+        if action in self.simulation_actions:
+            self.previous_action = action
+
+        return action
+    
+    def get_timestamp(self, start_date, day):
+        timestamp = start_date + \
+                        timedelta(days=day, hours=random.randint(0, 23), minutes=random.randint(0, 59),
+                                    seconds=random.randint(0, 59))
+        return timestamp
+    
+    def get_track_id(self):
+        return random.choice(self.tracks)
     
     def simulate_app_sessions(self, start_date:datetime=datetime(2024, 1, 1)):
         current_date = datetime.now().date()
@@ -87,30 +114,17 @@ class User():
         simulated_events = []
 
         for day in range(simulation_days):
-            if self.previous_action == "PAUSE":
-                actions = self.actions.remove("PAUSE")
+            n_actions = np.random.normal(self.average_n_actions, self.std_dev_n_actions)
+            for _ in range(n_actions):
+                id = 0
+                action = self.get_action()
+                timestamp = self.get_timestamp(start_date, day)
+                track_id = self.get_track_id()
 
-            elif self.previous_action == "QUIT":
-                actions = self.actions.remove("QUIT")
-
-            else:
-                actions = self.actions
-
-            action = random.choice(actions)
-            if action in self.simulation_actions:
-                self.previous_action = action
-
-            timestamp = start_date + \
-                    timedelta(days=day, hours=random.randint(0, 23), minutes=random.randint(0, 59),
-                                seconds=random.randint(0, 59))
-            
-            id = 0
-            track_id = random.choice(self.tracks)
-
-            event_record = {"id": id, "timestamp": timestamp,
-                           "action": action, "track_id": track_id,
-                           "user_id": self.user_id}
-            simulated_events.append(event_record)
+                event_record = {"id": id, "timestamp": timestamp,
+                            "action": action, "track_id": track_id,
+                            "user_id": self.user_id}
+                simulated_events.append(event_record)
 
 
 
