@@ -13,7 +13,7 @@ def get_parsed_event_schema():
                 "logicalType": "timestamp-millis"},
             {"name": "action", "type": {"type": "enum", "name": "event",
                                         "symbols": ["PLAY", "PAUSE", "SKIP", "QUIT",
-                                                    "LIKE", "DOWNLOAD", "ADD TO PLAYLIST"], 
+                                                    "LIKE", "DOWNLOAD", "ADD_TO_PLAYLIST"], 
                                         "default": "PLAY"}},
             {"name": "track_id", "type": "long"},
             {"name": "user_id", "type": "long"}
