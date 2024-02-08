@@ -5,7 +5,9 @@ from faker import Faker
 from fastavro import writer
 import numpy as np
 import pandas as pd
-from serializer import get_parsed_track_schema, get_parsed_user_schema
+from serializer import get_parsed_track_schema, get_parsed_user_schema, get_parsed_event_schema
+
+from utils import read_avro
 
 
 
@@ -75,7 +77,7 @@ def serialize_song_data(tracks_path:str, output_path):
 
 class User():
     def __init__(self, user_id, tracks) -> None:
-        self.actions = ["PLAY", "PAUSE", "SKIP", "QUIT", "LIKE", "DOWNLOAD", "ADD TO PLAYLIST"]
+        self.actions = ["PLAY", "PAUSE", "SKIP", "QUIT", "LIKE", "DOWNLOAD", "ADD_TO_PLAYLIST"]
         # actions to remove from available actions if same as previous action (user can't quit/pause twice in a row)
         self.simulation_actions = ["PLAY", "PAUSE", "QUIT"]
         self.user_id = user_id                                   
@@ -85,14 +87,11 @@ class User():
         self.std_dev_n_actions = random.randint(10, 30)
 
     def get_action(self):
-        if self.previous_action == "PAUSE":
-            actions = self.actions.remove("PAUSE")
-        elif self.previous_action == "QUIT":
-            actions = self.actions.remove("QUIT")
-        else:
-            actions = self.actions
+        available_actions = self.actions.copy()
+        if self.previous_action in ["PAUSE", "QUIT"]:
+            available_actions.remove(self.previous_action)
         
-        action = random.choice(actions)
+        action = random.choice(available_actions)
         if action in self.simulation_actions:
             self.previous_action = action
 
@@ -107,34 +106,54 @@ class User():
     def get_track_id(self):
         return random.choice(self.tracks)
     
-    def simulate_app_sessions(self, start_date:datetime=datetime(2024, 1, 1)):
+    def simulate_user_events(self, start_date:datetime=datetime(2024, 1, 1)):
         current_date = datetime.now().date()
-        simulation_days = (current_date - start_date).days
+        simulation_days = (current_date - start_date.date()).days
         
         simulated_events = []
 
         for day in range(simulation_days):
-            n_actions = np.random.normal(self.average_n_actions, self.std_dev_n_actions)
+            n_actions = int(np.random.normal(self.average_n_actions, self.std_dev_n_actions))
             for _ in range(n_actions):
                 id = 0
                 action = self.get_action()
                 timestamp = self.get_timestamp(start_date, day)
                 track_id = self.get_track_id()
 
-                event_record = {"id": id, "timestamp": timestamp,
+                event_record = {"id": id, "timestamp": timestamp.isoformat(),
                             "action": action, "track_id": track_id,
                             "user_id": self.user_id}
                 simulated_events.append(event_record)
 
+        return simulated_events
+    
+
+def simulate_all_user_events(users_path:str, tracks_path:str):
+    df_users = read_avro(users_path)
+    df_tracks = read_avro(tracks_path)
+
+    tracks = df_tracks["track_id"].unique()
+    user_id_list = df_users["user_id"].unique()
+
+    all_user_events = []
+    for user_id in user_id_list:
+        user = User(user_id, tracks)
+        simulated_events = user.simulate_user_events()
+        all_user_events.extend(simulated_events)
+
+    return all_user_events
 
 
-
+def serialize_event_data(all_user_events:list, output_path:str):
+    parsed_event_schema = get_parsed_event_schema()
+    with open(output_path, "wb") as out:
+        writer(out, parsed_event_schema, all_user_events)
 
 
 def main():
-    current_date = datetime.now().date()
-    simulation_time = current_date - datetime(2024, 1, 1).date()
-    print(simulation_time.days)
+    all_user_events = simulate_all_user_events(users_path="data/users.avro",
+                                               tracks_path="data/tracks.avro")
+    serialize_event_data(all_user_events, output_path="data/events.avro")
 
 
 if __name__ == "__main__":
