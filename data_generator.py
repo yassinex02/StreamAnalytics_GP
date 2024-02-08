@@ -72,11 +72,56 @@ def serialize_song_data(tracks_path:str, output_path):
                         df_tracks.to_dict(orient='records'))
 
 
-def main():
-    serialize_song_data(tracks_path="data/tracks.csv", output_path="data/tracks.avro")
-    users = generate_fake_users(100)
-    serialize_user_data(users, output_path="data/users.avro")
+class User():
+    def __init__(self, user_id, tracks) -> None:
+        self.actions = ["PLAY", "PAUSE", "SKIP", "QUIT", "LIKE", "DOWNLOAD", "ADD TO PLAYLIST"]
+        self.simulation_actions = ["PLAY", "PAUSE", "QUIT"]
+        self.user_id = user_id
+        self.previous_action = random.choice(self.simulation_actions)
+        self.tracks = tracks
     
+    def simulate_app_sessions(self, start_date:datetime=datetime(2024, 1, 1)):
+        current_date = datetime.now().date()
+        simulation_days = (current_date - start_date).days
+        
+        simulated_events = []
+
+        for day in range(simulation_days):
+            if self.previous_action == "PAUSE":
+                actions = self.actions.remove("PAUSE")
+
+            elif self.previous_action == "QUIT":
+                actions = self.actions.remove("QUIT")
+
+            else:
+                actions = self.actions
+
+            action = random.choice(actions)
+            if action in self.simulation_actions:
+                self.previous_action = action
+
+            timestamp = start_date + \
+                    timedelta(days=day, hours=random.randint(0, 23), minutes=random.randint(0, 59),
+                                seconds=random.randint(0, 59))
+            
+            id = 0
+            track_id = random.choice(self.tracks)
+
+            event_record = {"id": id, "timestamp": timestamp,
+                           "action": action, "track_id": track_id,
+                           "user_id": self.user_id}
+            simulated_events.append(event_record)
+
+
+
+
+
+
+def main():
+    current_date = datetime.now().date()
+    simulation_time = current_date - datetime(2024, 1, 1).date()
+    print(simulation_time.days)
+
 
 if __name__ == "__main__":
     main()
