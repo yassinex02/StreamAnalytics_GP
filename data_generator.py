@@ -55,15 +55,16 @@ def serialize_user_data(users: dict, output_path):
         writer(out, parsed_user_schema, records)
 
 
-def serialize_song_data(tracks_path: str, output_path: str):
+def serialize_song_data(tracks_path: str, df_2_path: str, output_path: str):
     parsed_track_schema = get_parsed_track_schema()
-    df_tracks_full = pd.read_csv(tracks_path)
 
-    columns_to_keep = ['id', 'name', 'duration_ms', 'artists', 'popularity', 'release_date',
-                       'danceability', 'energy', 'key', 'loudness', 'mode', 'speechiness',
-                       'acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo', 'time_signature']
+    # Read data from the CSV files
+    df_tracks = pd.read_csv(tracks_path)
+    df_2 = pd.read_csv(df_2_path)
 
-    df_tracks = df_tracks_full[columns_to_keep]
+    # Drop duplicates based on the 'name' and 'track_name' columns
+    df_tracks = df_tracks.drop_duplicates(subset='name', keep='first')
+    df_2 = df_2.drop_duplicates(subset='track_name', keep='first')
 
     # Drop the missing values
     df_tracks = df_tracks.dropna(subset=['id', 'name', 'popularity'])
@@ -74,7 +75,30 @@ def serialize_song_data(tracks_path: str, output_path: str):
     df_tracks['track_id'] = df_tracks['track_id'].astype('str')
     df_tracks['artist'] = df_tracks['artists'].str.strip()
 
-    avro_records = df_tracks.to_dict(orient='records')
+    # Find common songs
+    common_songs = set(df_tracks['name']).intersection(df_2['track_name'])
+
+    # Create datasets with only common songs
+    df_common_tracks = df_tracks[df_tracks['name'].isin(common_songs)]
+    df_common_2 = df_2[df_2['track_name'].isin(common_songs)]
+
+    # Select columns from df_2
+    df_2_selected = df_common_2[['track_name', 'album_name', 'track_genre']]
+
+    # Perform join on common song names
+    df_merged = pd.merge(df_common_tracks, df_2_selected,
+                         left_on='name', right_on='track_name', how='inner')
+
+    # Drop duplicates based on the 'name' column in the merged dataframe
+    df_merged = df_merged.drop_duplicates(subset='name', keep='first')
+
+    # Rename columns to match the Avro schema
+    df_merged = pd.merge(df_common_tracks, df_2_selected,
+                         left_on='name', right_on='track_name', how='inner')
+
+# Rename the 'artists' column to 'artist'
+
+    avro_records = df_merged.to_dict(orient='records')
     avro_records_with_schema = []
     for record in avro_records:
         avro_record_with_schema = {}
@@ -193,7 +217,9 @@ def serialize_event_data(all_user_events: list, output_path: str):
 
 def main():
     serialize_song_data(
-        '/Users/yassine/Desktop/IE/4th year/2nd sem/stream analytics/datasets/tracks.csv', 'data/tracks.avro')  # CHAGE WITH PATH TO EXCEL
+        '/Users/yassine/Desktop/IE/4th year/2nd sem/stream analytics/datasets/tracks.csv',
+        '/Users/yassine/Desktop/IE/4th year/2nd sem/stream analytics/datasets/dataset.csv',
+        'data/tracks.avro')  # CHAGE WITH PATH TO EXCEL
     serialize_artist_data('/Users/yassine/Desktop/IE/4th year/2nd sem/stream analytics/datasets/artists.csv',
                           'data/artists.avro')  # CHAGE WITH PATH TO EXCEL
     all_user_events = simulate_all_user_events(users_path="data/users.avro",

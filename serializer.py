@@ -70,7 +70,11 @@ def get_parsed_track_schema():
             {"name": "liveness", "type": "float", "default": 0.0},
             {"name": "valence", "type": "float", "default": 0.0},
             {"name": "tempo", "type": "float", "default": 0.0},
-            {"name": "time_signature", "type": "int", "default": 0}
+            {"name": "time_signature", "type": "int", "default": 0},
+            {"name": "album_name", "type": [
+                "null", "string"], "default": None},
+            {"name": "track_genre", "type": [
+                "null", "string"], "default": None}
         ]
     }
 
