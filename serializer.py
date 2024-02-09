@@ -77,10 +77,31 @@ def get_parsed_track_schema():
     return parse_schema(track_schema)
 
 
+def get_parsed_artist_schema():
+    artist_schema = {
+        "doc": "Spotify Wrapped Data Feed - Artist Info",
+        "name": "Artist",
+        "namespace": "com.spotify.wrapped",
+        "type": "record",
+        "fields": [
+            {"name": "id", "type": "string"},
+            {"name": "followers", "type": ["null", "float"], "default": None},
+            {"name": "name", "type": ["null", "string"], "default": None},
+            {"name": "popularity", "type": "int", "default": 0}
+        ]
+    }
+
+    return parse_schema(artist_schema)
+
+
+parsed_artist_schema = get_parsed_artist_schema()
+
+
 def print_parsed_schemas():
     parsed_event_schema = get_parsed_event_schema()
     parsed_user_schema = get_parsed_user_schema()
     parsed_track_schema = get_parsed_track_schema()
+    parsed_artist_schema = get_parsed_artist_schema()
 
     print("Parsed Event Schema:")
     print(parsed_event_schema)
