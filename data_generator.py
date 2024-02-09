@@ -5,7 +5,7 @@ from faker import Faker
 from fastavro import writer
 import numpy as np
 import pandas as pd
-from serializer import get_parsed_track_schema, get_parsed_user_schema, get_parsed_event_schema
+from serializer import get_parsed_track_schema, get_parsed_user_schema, get_parsed_event_schema, get_parsed_artist_schema
 
 from utils import read_avro
 
@@ -86,6 +86,31 @@ def serialize_song_data(tracks_path: str, output_path: str):
 
     with open(output_path, 'wb') as out:
         writer(out, parsed_track_schema, avro_records_with_schema)
+
+
+def serialize_artist_data(artists_path: str, output_path: str):
+    parsed_artists_schema = get_parsed_artist_schema()
+    # Read data from the Excel file
+    df_artists = pd.read_csv(artists_path)
+
+    # Drop rows with missing values in key columns
+    df_artists = df_artists.dropna(subset=['id', 'name', 'popularity'])
+
+    # Prepare Avro records with schema
+    avro_records = df_artists.to_dict(orient='records')
+    avro_records_with_schema = []
+
+    for record in avro_records:
+        avro_record_with_schema = {}
+        for field in parsed_artists_schema['fields']:
+            field_name = field['name']
+            avro_record_with_schema[field_name] = record.get(
+                field_name, field.get('default', None))
+        avro_records_with_schema.append(avro_record_with_schema)
+
+    # Serialize Avro data to the specified output path
+    with open(output_path, 'wb') as out:
+        writer(out, parsed_artists_schema, avro_records_with_schema)
 
 
 class User():
@@ -169,6 +194,8 @@ def serialize_event_data(all_user_events: list, output_path: str):
 def main():
     serialize_song_data(
         '/Users/yassine/Desktop/IE/4th year/2nd sem/stream analytics/datasets/tracks.csv', 'data/tracks.avro')  # CHAGE WITH PATH TO EXCEL
+    serialize_artist_data('/Users/yassine/Desktop/IE/4th year/2nd sem/stream analytics/datasets/artists.csv',
+                          'data/artists.avro')  # CHAGE WITH PATH TO EXCEL
     all_user_events = simulate_all_user_events(users_path="data/users.avro",
                                                tracks_path="data/tracks.avro")
     serialize_event_data(all_user_events, output_path="data/events.avro")
