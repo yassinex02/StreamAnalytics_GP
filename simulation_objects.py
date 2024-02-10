@@ -171,10 +171,10 @@ class User():
     def __init__(self, user_id, df_artists:pd.DataFrame, df_tracks:pd.DataFrame) -> None:
         self.user_id = user_id
         self.personality = Personality()
-        self.previous_artist = random.choice(df_artists.id.unique()).tolist()[0]
-        self.previous_artists_list = [self.previous_artist] # simplification: keeping track of only 1 artist
+        self.previous_artist = random.choice(df_artists.name.unique())
+        self.previous_artists_list = [self.previous_artist]
 
-        previous_artist_tracks = df_tracks[df_tracks["artist_id"] == self.previous_artist]
+        previous_artist_tracks = df_tracks[df_tracks["artist"] == self.previous_artist]
         self.previous_track = random.choice(previous_artist_tracks.track_id.unique())
 
     def get_n_long_sessions(self):
