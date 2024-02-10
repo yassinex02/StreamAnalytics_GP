@@ -161,8 +161,8 @@ class Session():
     def update_session_duration(self, listening_times:dict) -> None:
         self.total_duration = sum(listening_times.values())
 
-    def simulate_session(self):
-        self.get_tracks_list()
+    def simulate_session(self, df_tracks:pd.DataFrame):
+        self.get_tracks_list(df_tracks)
         listening_times = self.get_session_listening_times()
         self.update_session_duration(listening_times)
 
@@ -191,15 +191,15 @@ class User():
     def get_n_short_sessions(self):
         return int(np.random.normal(loc=5, scale=1))
     
-    def get_sessions(self, n_long_sessions:int, n_short_sessions:int):
+    def get_sessions(self, n_long_sessions:int, n_short_sessions:int, df_tracks:pd.DataFrame):
         sessions = []
         for _ in range(n_long_sessions):
             session = Session(user=self, type="long")
-            session.simulate_session()
+            session.simulate_session(df_tracks)
             sessions.append(session)
         for _ in range(n_short_sessions):
             session = Session(user=self, type="short")
-            session.simulate_session()
+            session.simulate_session(df_tracks)
             sessions.append(session)
 
         return sessions
