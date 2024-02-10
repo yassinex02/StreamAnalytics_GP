@@ -5,7 +5,8 @@ from faker import Faker
 from fastavro import writer
 import numpy as np
 import pandas as pd
-from serializer import get_parsed_track_schema, get_parsed_user_schema, get_parsed_event_schema, get_parsed_artist_schema
+from serializer import get_parsed_track_schema, get_parsed_user_schema, \
+    get_parsed_event_schema, get_parsed_artist_schema
 
 from utils import read_avro
 
@@ -216,12 +217,8 @@ def serialize_event_data(all_user_events: list, output_path: str):
 
 
 def main():
-    serialize_song_data(
-        '/Users/yassine/Desktop/IE/4th year/2nd sem/stream analytics/datasets/tracks.csv',
-        '/Users/yassine/Desktop/IE/4th year/2nd sem/stream analytics/datasets/dataset.csv',
-        'data/tracks.avro')  # CHAGE WITH PATH TO EXCEL
-    serialize_artist_data('/Users/yassine/Desktop/IE/4th year/2nd sem/stream analytics/datasets/artists.csv',
-                          'data/artists.avro')  # CHAGE WITH PATH TO EXCEL
+    serialize_song_data('data/tracks.csv','data/tracks.avro')
+    serialize_artist_data('data/artists.csv', 'data/artists.avro')
     all_user_events = simulate_all_user_events(users_path="data/users.avro",
                                                tracks_path="data/tracks.avro")
     serialize_event_data(all_user_events, output_path="data/events.avro")
