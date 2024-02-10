@@ -168,10 +168,10 @@ class Session():
 
 
 class User():
-    def __init__(self, user_id, df_artists:pd.DataFrame, df_tracks:pd.DataFrame) -> None:
+    def __init__(self, user_id, artists:list, df_tracks:pd.DataFrame) -> None:
         self.user_id = user_id
         self.personality = Personality()
-        self.previous_artist = random.choice(df_artists.name.unique())
+        self.previous_artist = random.choice(artists)
         self.previous_artists_list = [self.previous_artist]
 
         previous_artist_tracks = df_tracks[df_tracks["artist"] == self.previous_artist]
