@@ -11,12 +11,9 @@ def get_parsed_event_schema():
             {"name": "id", "type": "long"},
             {"name": "timestamp", "type": "string",
                 "logicalType": "timestamp-millis"},
-            {"name": "action", "type": {"type": "enum", "name": "event",
-                                        "symbols": ["PLAY", "PAUSE", "SKIP", "QUIT",
-                                                    "LIKE", "DOWNLOAD", "ADD_TO_PLAYLIST"],
-                                        "default": "PLAY"}},
             {"name": "track_id", "type": "string"},
-            {"name": "user_id", "type": "long"}
+            {"name": "user_id", "type": "long"},
+            {"name": "listening_time", "type":"long"}
         ]
     }
 
@@ -35,14 +32,11 @@ def get_parsed_user_schema():
             {"name": "location", "type": "string"},
             {"name": "birthdate", "type": "string", "logicalType": "date"},
             {"name": "gender", "type": "string", "symbols": ["M", "F"]},
-            {"name": "favorite_genre", "type": {
-                "type": "array", "items": "string"}, "default": []}
         ]
     }
 
     return parse_schema(user_schema)
 
-# TAKIG EVRTH TO GENERATE THE PERSONALITIES
 
 
 def get_parsed_track_schema():
