@@ -113,9 +113,9 @@ class Session():
             return self.user.previous_track
                 
         if self.user_is_loyal():
-            df_tracks = df_tracks[df_tracks["artist_id"] == self.user.previous_artist]
+            df_tracks = df_tracks[df_tracks["artist"] == self.user.previous_artist]
         elif self.user_is_familiar():
-            df_tracks = df_tracks[df_tracks["artist_id"].isin(self.user.previous_artists_list)]
+            df_tracks = df_tracks[df_tracks["artist"].isin(self.user.previous_artists_list)]
         
         sorted_tracks = self.sort_tracks(df_tracks)
         next_track = self.sample_from_exponential_distribution(sorted_tracks)
@@ -127,9 +127,9 @@ class Session():
 
         tracks_list = []
         for _ in range(n_tracks):
-            track = self.get_next_track(self, df_tracks)
+            track = self.get_next_track(df_tracks)
             self.user.previous_track = track
-            self.user.previous_artist = df_tracks[df_tracks["track_id"] == track]["artist_id"].tolist()[0]
+            self.user.previous_artist = df_tracks[df_tracks["track_id"] == track]["artist"].tolist()[0]
             tracks_list.append(track)
         self.tracks_list = tracks_list
 
