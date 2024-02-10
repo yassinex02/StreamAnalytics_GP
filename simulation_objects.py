@@ -86,17 +86,16 @@ class Session():
         """
             This method sorts the tracks by date depending on user personality.
         """
-        df_tracks["release_date"] = pd.to_datetime(df_tracks["release_date"])
-        sorted_tracks = df_tracks.sort_values(by='release_date')
+        sorted_tracks = df_tracks.sort_values(by='newness')
         if self.user.personality.timelessness_newness == "N":
-            sorted_tracks = df_tracks.sort_values(by='release_date', ascending=False)
+            sorted_tracks = df_tracks.sort_values(by='newness', ascending=False)
 
         return sorted_tracks
     
-    def sample_from_exponential_distribution(self, df_tracks:pd.DataFrame):
-        release_dates = df_tracks.release_date
+    def sample_from_exponential_distribution(self, df_tracks: pd.DataFrame):
+        normalized_scores = df_tracks.normalized_score
 
-        intervals = [(release_dates[i + 1] - release_dates[i]).days for i in range(len(release_dates) - 1)]
+        intervals = [(normalized_scores[i + 1] - normalized_scores[i]) for i in range(len(normalized_scores) - 1)]
         lambda_estimate = 1.0 / np.mean(intervals)
 
         cumulative_probabilities = np.cumsum(np.exp(-lambda_estimate * np.array(intervals)))
@@ -107,6 +106,7 @@ class Session():
         selected_song = df_tracks.iloc[selected_index].track_id
 
         return selected_song
+
 
     def get_next_track(self, df_tracks:pd.DataFrame):
         if self.user_is_very_loyal():
