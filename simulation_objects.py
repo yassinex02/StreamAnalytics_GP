@@ -93,19 +93,12 @@ class Session():
         return sorted_tracks
     
     def sample_from_exponential_distribution(self, df_tracks: pd.DataFrame):
-        newness_scores = df_tracks.newness_score
+        lambda_parameter = 0.0003
+        sample = int(np.random.exponential(scale=1/lambda_parameter))
+        track_index = max(sample, len(df_tracks))
+        track_id = df_tracks.iloc[track_index]["track_id"].item()
 
-        intervals = [(newness_scores[i + 1] - newness_scores[i]) for i in range(len(newness_scores) - 1)]
-        lambda_estimate = 1.0 / np.mean(intervals)
-
-        cumulative_probabilities = np.cumsum(np.exp(-lambda_estimate * np.array(intervals)))
-        cumulative_probabilities /= cumulative_probabilities[-1]
-
-        random_number = np.random.rand()
-        selected_index = np.searchsorted(cumulative_probabilities, random_number)
-        selected_song = df_tracks.iloc[selected_index].track_id
-
-        return selected_song
+        return track_id
 
 
     def get_next_track(self, df_tracks:pd.DataFrame):
