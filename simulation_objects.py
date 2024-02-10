@@ -93,10 +93,10 @@ class Session():
         return sorted_tracks
     
     def sample_from_exponential_distribution(self, df_tracks: pd.DataFrame):
-        lambda_parameter = 0.0003
+        lambda_parameter = 3 / len(df_tracks)
         sample = int(np.random.exponential(scale=1/lambda_parameter))
-        track_index = max(sample, len(df_tracks))
-        track_id = df_tracks.iloc[track_index]["track_id"].item()
+        track_index = min(sample, len(df_tracks) - 1)
+        track_id = df_tracks.iloc[track_index]["track_id"]
 
         return track_id
 
