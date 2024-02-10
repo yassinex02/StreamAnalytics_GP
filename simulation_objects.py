@@ -4,8 +4,6 @@ import random
 import numpy as np
 import pandas as pd
 
-from utils import get_n_long_sessions, get_n_short_sessions, \
-                    get_sessions, allocate_sessions
 
 
 class Personality():
@@ -15,30 +13,6 @@ class Personality():
         self.loyalty_variety = random.choice(["L", "V"])
         self.commonality_uniqueness = random.choice(["C", "U"])
 
-
-class User():
-    def __init__(self, user_id, df_artists:pd.DataFrame, df_tracks:pd.DataFrame) -> None:
-        self.user_id = user_id
-        self.personality = Personality()
-        self.previous_artist = random.choice(df_artists.id.unique()).tolist()[0]
-        self.previous_artists_list = [self.previous_artist] # simplification: keeping track of only 1 artist
-
-        previous_artist_tracks = df_tracks[df_tracks["artist_id"] == self.previous_artist]
-        self.previous_track = random.choice(previous_artist_tracks.track_id.unique())
-
-    def simulate_user_events(self, start_date:datetime=datetime(2024, 1, 1)):
-        current_date = datetime.now().date()
-        simulation_days = (current_date - start_date.date()).days
-        
-        simulated_events = []
-        for day in range(simulation_days):
-            n_long_sessions = get_n_long_sessions()
-            n_short_sessions = get_n_short_sessions()
-
-            sessions = get_sessions(self.user)
-
-        return simulated_events
-    
 
 class Session():
     def __init__(self, user, type):
@@ -191,3 +165,77 @@ class Session():
         self.get_tracks_list()
         listening_times = self.get_session_listening_times()
         self.update_session_duration(listening_times)
+
+
+class User():
+    def __init__(self, user_id, df_artists:pd.DataFrame, df_tracks:pd.DataFrame) -> None:
+        self.user_id = user_id
+        self.personality = Personality()
+        self.previous_artist = random.choice(df_artists.id.unique()).tolist()[0]
+        self.previous_artists_list = [self.previous_artist] # simplification: keeping track of only 1 artist
+
+        previous_artist_tracks = df_tracks[df_tracks["artist_id"] == self.previous_artist]
+        self.previous_track = random.choice(previous_artist_tracks.track_id.unique())
+
+    def get_n_long_sessions(self):
+        n = random.randint(0, 100)
+        if n < 2:
+            return 3
+        elif n <10:
+            return 0
+        elif n <50:
+            return 1
+        else:
+            return 2
+        
+    def get_n_short_sessions(self):
+        return int(np.random.normal(loc=5, scale=1))
+    
+    def get_sessions(self, n_long_sessions:int, n_short_sessions:int):
+        sessions = []
+        for _ in range(n_long_sessions):
+            session = Session(user=self, type="long")
+            session.simulate_session()
+            sessions.append(session)
+        for _ in range(n_short_sessions):
+            session = Session(user=self, type="short")
+            session.simulate_session()
+            sessions.append(session)
+
+        return sessions
+
+    def allocate_sessions(self, sessions:list):
+        """
+            Algorithm that divides the day into 24 hour-long slots,
+            and allocates each session to one or more slots depending
+            on its duration. This method returns a session schedule dict
+            of the form: {session: start_time} where start_time is the
+            index of the hour-long slot where the session starts.
+        """
+        slots_availability = {i:True for i in range(24)}
+
+        session_schedule = {}
+        for session in sessions:
+            n_slots = int(session.total_duration / (1000 * 60 * 60)) + 1
+            for slot in range(24):
+                if all(slots_availability[i] for i in range(slot, slot + n_slots)):
+                    session_schedule[session] = slot
+                    for i in range(slot, slot + n_slots):
+                        slots_availability[i] = False
+                    break
+                print(f"Could not find a slot for {session}")
+
+        return session_schedule
+
+    def simulate_user_events(self, start_date:datetime=datetime(2024, 1, 1)):
+        current_date = datetime.now().date()
+        simulation_days = (current_date - start_date.date()).days
+        
+        simulated_events = []
+        for day in range(simulation_days):
+            n_long_sessions = self.get_n_long_sessions()
+            n_short_sessions = self.get_n_short_sessions()
+
+            sessions = self.get_sessions(n_long_sessions, n_short_sessions)
+
+        return simulated_events
