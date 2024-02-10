@@ -1,5 +1,10 @@
+import random
+
 from fastavro import reader
+import numpy as np
 import pandas as pd
+
+from simulation_objects import Session
 
 
 def read_avro(avro_path: str):
