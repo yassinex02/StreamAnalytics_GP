@@ -116,6 +116,9 @@ def print_parsed_schemas():
     print("\nParsed Track Schema:")
     print(parsed_track_schema)
 
+    print("\nParsed Artist Schema:")
+    print(parsed_artist_schema)
+
 
 if __name__ == "__main__":
     print_parsed_schemas()
