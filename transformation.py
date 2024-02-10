@@ -67,7 +67,7 @@ def main():
     df_merged = merge_artists(df_tracks, df_artists)
     df_final = create_final_dataframe(df_merged)
 
-    save_to_csv(df_final, 'df_final_songs.csv')
+    save_to_csv(df_final, 'data/transformed_tracks.csv')
     return df_final
 
 
