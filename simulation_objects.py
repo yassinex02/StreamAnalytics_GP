@@ -86,16 +86,16 @@ class Session():
         """
             This method sorts the tracks by date depending on user personality.
         """
-        sorted_tracks = df_tracks.sort_values(by='newness')
+        sorted_tracks = df_tracks.sort_values(by='newness_score')
         if self.user.personality.timelessness_newness == "N":
-            sorted_tracks = df_tracks.sort_values(by='newness', ascending=False)
+            sorted_tracks = df_tracks.sort_values(by='newness_score', ascending=False)
 
         return sorted_tracks
     
     def sample_from_exponential_distribution(self, df_tracks: pd.DataFrame):
-        normalized_scores = df_tracks.normalized_score
+        newness_scores = df_tracks.newness_score
 
-        intervals = [(normalized_scores[i + 1] - normalized_scores[i]) for i in range(len(normalized_scores) - 1)]
+        intervals = [(newness_scores[i + 1] - newness_scores[i]) for i in range(len(newness_scores) - 1)]
         lambda_estimate = 1.0 / np.mean(intervals)
 
         cumulative_probabilities = np.cumsum(np.exp(-lambda_estimate * np.array(intervals)))
