@@ -138,11 +138,11 @@ class Session():
 
         return min(listening_time, track_duration)
     
-    def get_session_listening_times(self, df_tracks) -> dict:
+    def get_session_listening_times(self, df_tracks:pd.DataFrame) -> dict:
         listening_times = {}
 
         for track in self.tracks_list:
-            track_duration = df_tracks[df_tracks["track_id"] == track]["duration"].item()
+            track_duration = df_tracks[df_tracks["track_id"] == track]["duration"].tolist()[0]
             if self.user_will_skip_track():
                 listening_time = self.get_listening_time(track_duration)
             else:
@@ -156,7 +156,7 @@ class Session():
 
     def simulate_session(self, df_tracks:pd.DataFrame):
         self.get_tracks_list(df_tracks)
-        listening_times = self.get_session_listening_times()
+        listening_times = self.get_session_listening_times(df_tracks)
         self.update_session_duration(listening_times)
 
 
@@ -210,12 +210,15 @@ class User():
         session_schedule = {}
         for session in sessions:
             n_slots = int(session.total_duration / (1000 * 60 * 60)) + 1
-            for slot in range(24):
+            available_slots = [slot for slot, availability in slots_availability.items() if availability]
+            random.shuffle(available_slots)
+            for slot in available_slots:
                 if all(slots_availability[i] for i in range(slot, slot + n_slots)):
                     session_schedule[session] = slot
                     for i in range(slot, slot + n_slots):
                         slots_availability[i] = False
                     break
+            if session not in session_schedule:
                 print(f"Could not find a slot for {session}")
 
         return session_schedule
