@@ -257,7 +257,7 @@ class User():
         for session in sorted_schedule:
             hour = sorted_schedule[session]
             miliseconds = 0
-            for track in session.track_list:
+            for track in session.tracks_list:
                 miliseconds += track.listening_time
                 timestamp = self.get_timestamp(start_date, day, hour, miliseconds)
                 
@@ -277,5 +277,5 @@ class User():
         id = 0
         for day in range(simulation_days):
             simulated_events, id = self.simulate_daily_events(day, df_tracks, start_date, simulated_events, id)
-        
+
         return simulated_events
