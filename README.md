@@ -26,7 +26,12 @@ Our group decided on 4 tables. The AVRO schema defines these entities along with
 
 
 ## Design of Synthetic Data Generation Scripts
-The synthetic data generation process starts with defining the data schema. The AVRO schema is specified using JSON, describing the structure of the data including data types, field names, and any nested structures.
+The synthetic data generation process starts with defining the data schema. The AVRO schema is specified using JSON, describing the structure of the data including data types, field names, and any nested structures. It involves simulating the streaming experiences of both individual users and multiple independent users. We have developed Python scripts to generate realistic, time-series data reflecting typical user interaction patterns with Spotify's streaming service. Key components of the script include:
+- **User Profile Generation**: Random generation of user profiles including demographics, preferences, and listening habits (data_generator.py).
+- **Song Catalog Simulation**: Creation of a simulated song catalog with diverse genres, artists, and popularity metrics (main.py).
+- **User Interaction Simulation**: Generation of user interactions such as song plays, skips, likes, and playlist creations based on probabilistic models (main.py).
+- **Data Serialization**: Transformation of generated data into AVRO format adhering to the defined schema (serializer.py).
+
 
 
 ## Challenges Encountered
@@ -34,4 +39,12 @@ The synthetic data generation process starts with defining the data schema. The 
 
 ## Alignment of the Synthetic Data with Project Needs
 The synthetic data generated closely aligns with the project's needs by providing a representative sample of user interactions and streaming experiences. It comprehensively reflects a similar structure to that seen in real-world data. The data feed enables analytics and insights generation for Spotify Wrapped, facilitating personalized user experiences and recommendations. Moving forward, continuous refinement and expansion of the data feed will further enhance its utility and relevance in understanding user preferences and enhancing the Spotify experience.
+
+## Credits
+The authors of this project are:
+1. Taha Yassine Moumni
+2. Mehdi Zaid
+3. Mateo Ploquin 
+4. Abdallah Ghaddar
+5. Talal Shehadeh 
 
