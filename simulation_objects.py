@@ -14,11 +14,18 @@ class Personality():
         self.commonality_uniqueness = random.choice(["C", "U"])
 
 
+class Track():
+    def __init__(self, track_id, listening_time):
+        self.track_id = track_id
+        self.listening_time = listening_time
+
+
 class Session():
     def __init__(self, user, type):
         self.user = user
         self.type = type
         self.tracks_list = []
+        self.listening_times = []
         self.total_duration = 0
 
     def get_n_tracks(self):
@@ -126,6 +133,8 @@ class Session():
             tracks_list.append(track)
         self.tracks_list = tracks_list
 
+        return tracks_list
+
     def user_will_skip_track(self):
         random_number = random.randint(0, 2)
         if random_number == 0:
@@ -154,9 +163,14 @@ class Session():
     def update_session_duration(self, listening_times:dict) -> None:
         self.total_duration = sum(listening_times.values())
 
+    def update_tracks_list(self, tracks_list) -> None:
+        self.tracks_list = tracks_list
+
     def simulate_session(self, df_tracks:pd.DataFrame):
-        self.get_tracks_list(df_tracks)
+        tracks_list = self.get_tracks_list(df_tracks)
         listening_times = self.get_session_listening_times(df_tracks)
+        tracks_objects_list = [Track(tracks_list[i], listening_times[tracks_list[i]]) for i in range(len(tracks_list))]
+        self.update_tracks_list(tracks_objects_list)
         self.update_session_duration(listening_times)
 
 
@@ -223,15 +237,37 @@ class User():
 
         return session_schedule
 
-    def simulate_user_events(self, start_date:datetime=datetime(2024, 1, 1)):
+    def get_daily_schedule(self, df_tracks):
+        n_long_sessions = self.get_n_long_sessions()
+        n_short_sessions = self.get_n_short_sessions()
+        sessions = self.get_sessions(n_long_sessions, n_short_sessions, df_tracks)
+        session_schedule = self.allocate_sessions(sessions)
+        sorted_schedule = dict(sorted(session_schedule.items(), key=lambda item: item[1]))
+
+        return sorted_schedule
+    
+    def get_timestamp(self, start_date, day, hour, minute, second):
+        timestamp = start_date + \
+                    timedelta(days=day, hours=hour, minutes=minute, seconds=second)
+        
+        return timestamp
+
+    def simulate_user_events(self, df_tracks:pd.DataFrame, start_date:datetime=datetime(2024, 1, 1)):
         current_date = datetime.now().date()
         simulation_days = (current_date - start_date.date()).days
         
         simulated_events = []
+        id = 0
         for day in range(simulation_days):
-            n_long_sessions = self.get_n_long_sessions()
-            n_short_sessions = self.get_n_short_sessions()
+            sorted_schedule = self.get_daily_schedule(df_tracks)
+            for session in sorted_schedule:
+                hour = sorted_schedule[session]
+                minute = 0
+                second = 0
+                for track in session.track_list:
+                    timestamp = self.get_timestamp(start_date, day, hour, minute, second)
 
-            sessions = self.get_sessions(n_long_sessions, n_short_sessions)
+                    id += 1
+            
 
         return simulated_events
