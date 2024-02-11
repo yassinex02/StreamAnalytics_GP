@@ -251,6 +251,23 @@ class User():
                     timedelta(days=day, hours=hour, milliseconds=miliseconds)
         
         return timestamp
+    
+    def simulate_daily_events(self, day, df_tracks, start_date, simulated_events, id):
+        sorted_schedule = self.get_daily_schedule(df_tracks)
+        for session in sorted_schedule:
+            hour = sorted_schedule[session]
+            miliseconds = 0
+            for track in session.track_list:
+                miliseconds += track.listening_time
+                timestamp = self.get_timestamp(start_date, day, hour, miliseconds)
+                
+                event_record = {"id": id, "timestamp": timestamp.isoformat(),
+                                "track_id": track.track_id, "user_id": self.user_id,
+                                "listening_time": track.listening_time}
+                simulated_events.append(event_record)
+                id += 1
+
+        return simulated_events, id
 
     def simulate_user_events(self, df_tracks:pd.DataFrame, start_date:datetime=datetime(2024, 1, 1)):
         current_date = datetime.now().date()
@@ -259,18 +276,6 @@ class User():
         simulated_events = []
         id = 0
         for day in range(simulation_days):
-            sorted_schedule = self.get_daily_schedule(df_tracks)
-            for session in sorted_schedule:
-                hour = sorted_schedule[session]
-                miliseconds = 0
-                for track in session.track_list:
-                    miliseconds += track.listening_time
-                    timestamp = self.get_timestamp(start_date, day, hour, miliseconds)
-                   
-                    event_record = {"id": id, "timestamp": timestamp.isoformat(),
-                                    "track_id": track.track_id, "user_id": self.user_id,
-                                    "listening_time": track.listening_time}
-                    simulated_events.append(event_record)
-                    id += 1
-
+            simulated_events, id = self.simulate_daily_events(day, df_tracks, start_date, simulated_events, id)
+        
         return simulated_events
