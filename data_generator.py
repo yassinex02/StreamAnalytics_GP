@@ -8,6 +8,7 @@ import pandas as pd
 from serializer import get_parsed_track_schema, get_parsed_user_schema, \
     get_parsed_event_schema, get_parsed_artist_schema
 
+from simulation_objects import User
 from utils import read_avro
 
 
@@ -138,73 +139,16 @@ def serialize_artist_data(artists_path: str, output_path: str):
         writer(out, parsed_artists_schema, avro_records_with_schema)
 
 
-class User():
-    def __init__(self, user_id, tracks) -> None:
-        self.actions = ["PLAY", "PAUSE", "SKIP", "QUIT",
-                        "LIKE", "DOWNLOAD", "ADD_TO_PLAYLIST"]
-        # actions to remove from available actions if same as previous action (user can't quit/pause twice in a row)
-        self.simulation_actions = ["PLAY", "PAUSE", "QUIT"]
-        self.user_id = user_id
-        self.previous_action = random.choice(self.simulation_actions)
-        self.tracks = tracks
-        # average number of daily events for user
-        self.average_n_actions = np.random.normal(100, 25)
-        self.std_dev_n_actions = random.randint(10, 30)
-
-    def get_action(self):
-        available_actions = self.actions.copy()
-        if self.previous_action in ["PAUSE", "QUIT"]:
-            available_actions.remove(self.previous_action)
-
-        action = random.choice(available_actions)
-        if action in self.simulation_actions:
-            self.previous_action = action
-
-        return action
-
-    def get_timestamp(self, start_date, day):
-        timestamp = start_date + \
-            timedelta(days=day, hours=random.randint(0, 23), minutes=random.randint(0, 59),
-                      seconds=random.randint(0, 59))
-        return timestamp
-
-    def get_track_id(self):
-        return random.choice(self.tracks)
-
-    def simulate_user_events(self, start_date: datetime = datetime(2024, 1, 1)):
-        current_date = datetime.now().date()
-        simulation_days = (current_date - start_date.date()).days
-
-        simulated_events = []
-
-        for day in range(simulation_days):
-            n_actions = int(np.random.normal(
-                self.average_n_actions, self.std_dev_n_actions))
-            for _ in range(n_actions):
-                id = 0
-                action = self.get_action()
-                timestamp = self.get_timestamp(start_date, day)
-                track_id = self.get_track_id()
-
-                event_record = {"id": id, "timestamp": timestamp.isoformat(),
-                                "action": action, "track_id": track_id,
-                                "user_id": self.user_id}
-                simulated_events.append(event_record)
-
-        return simulated_events
-
-
 def simulate_all_user_events(users_path: str, tracks_path: str):
     df_users = read_avro(users_path)
-    df_tracks = read_avro(tracks_path)
+    df_tracks = pd.read_csv(tracks_path)
 
-    tracks = df_tracks["track_id"].unique()
     user_id_list = df_users["user_id"].unique()
 
     all_user_events = []
     for user_id in user_id_list:
-        user = User(user_id, tracks)
-        simulated_events = user.simulate_user_events()
+        user = User(user_id, artists=df_tracks["artist"].unique().tolist(), df_tracks=df_tracks)
+        simulated_events = user.simulate_user_events(df_tracks)
         all_user_events.extend(simulated_events)
 
     return all_user_events
@@ -217,10 +161,10 @@ def serialize_event_data(all_user_events: list, output_path: str):
 
 
 def main():
-    serialize_song_data('data/tracks.csv','data/tracks.avro')
-    serialize_artist_data('data/artists.csv', 'data/artists.avro')
+    #serialize_song_data('data/tracks.csv','data/tracks.avro')
+    #serialize_artist_data('data/artists.csv', 'data/artists.avro')
     all_user_events = simulate_all_user_events(users_path="data/users.avro",
-                                               tracks_path="data/tracks.avro")
+                                               tracks_path="data/transformed_tracks.csv")
     serialize_event_data(all_user_events, output_path="data/events.avro")
 
 
