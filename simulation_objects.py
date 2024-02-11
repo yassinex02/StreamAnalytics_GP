@@ -246,9 +246,9 @@ class User():
 
         return sorted_schedule
     
-    def get_timestamp(self, start_date, day, hour, minute, second):
+    def get_timestamp(self, start_date, day, hour, miliseconds):
         timestamp = start_date + \
-                    timedelta(days=day, hours=hour, minutes=minute, seconds=second)
+                    timedelta(days=day, hours=hour, milliseconds=miliseconds)
         
         return timestamp
 
@@ -262,12 +262,15 @@ class User():
             sorted_schedule = self.get_daily_schedule(df_tracks)
             for session in sorted_schedule:
                 hour = sorted_schedule[session]
-                minute = 0
-                second = 0
+                miliseconds = 0
                 for track in session.track_list:
-                    timestamp = self.get_timestamp(start_date, day, hour, minute, second)
-
+                    miliseconds += track.listening_time
+                    timestamp = self.get_timestamp(start_date, day, hour, miliseconds)
+                   
+                    event_record = {"id": id, "timestamp": timestamp.isoformat(),
+                                    "track_id": track.track_id, "user_id": self.user_id,
+                                    "listening_time": track.listening_time}
+                    simulated_events.append(event_record)
                     id += 1
-            
 
         return simulated_events
