@@ -38,7 +38,10 @@ Listening personalities (are introduced by categorizing songs and user interacti
 maybe here we can add the order of the scripts and how to run everything?
 
 ## Challenges Encountered
-mention any chanllenges encountered here 
+Some of the main challenges that we faced were related to the datasets and variables. 
+* In the artist dataset, the *Genre* column was empty, therefore we had to drop it. 
+* In the first song dataset, the *release date* variable had very odd formats , DD-MM-YYYY, MM-YYYY, YYYY. That required us to do a lot of preprocessing to be able to find the *months_elapsed* variable and calculate the *newness score*. 
+* Some songs were featuring more than one artist , so the *artist* column in the songs dataset came occasionally as a list of strings. This caused a problem when we tried to create an inner join between the song dataset and the artists on common artist names. As such, we decided to delete all the rows that had more than 1 artist featured in a song, resulting in the final dataset that contained around 22k rows which is ideal for our simulation. 
 
 ## Alignment of the Synthetic Data with Project Needs
 The synthetic data generated closely aligns with the project's needs by providing a representative sample of user interactions and streaming experiences. It comprehensively reflects a similar structure to that seen in real-world data. The data feed enables analytics and insights generation for Spotify Wrapped, facilitating personalized user experiences and recommendations. Moving forward, continuous refinement and expansion of the data feed will further enhance its utility and relevance in understanding user preferences and enhancing the Spotify experience.
