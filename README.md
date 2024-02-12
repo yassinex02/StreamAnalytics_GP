@@ -21,8 +21,7 @@ Our group decided on 4 tables. The AVRO schema defines these entities along with
 1. **user**: to generate Spotify users, we used the Faker and datetime libraries to provide us with a list of users including their ID, username, location, birthdate, gender, and favorite genre. We defined the type of each variable based on our knowledge of previous similar variables we have seen and used in other datasets.
 2. **track**: introduced variables that were included in the dataset we chose, including track ID, duration, artist, name, popularity, release date, and many more. The type of each variable was defined based on the original type of the variable in the dataset provided to us.
 3. **artist**: contained the ID, followers, name, and popularity variables, all of which were also defined by the type that was given in the original dataset.
-4. **event**:   
-
+4. **event**: a user event consists of an event ID, timestamp of the event, track ID, user ID, and listening time, which is how long the user plays the song for. The type of the fields was assigned based on patterns seen in similar/ indentical fields in the other tables.
 
 ## Design of Synthetic Data Generation Scripts
 The synthetic data generation process starts with defining the data schema. The AVRO schema is specified using JSON, describing the structure of the data including data types, field names, and any nested structures. It involves simulating the streaming experiences of both individual users and multiple independent users. We have developed Python scripts to generate realistic, time-series data reflecting typical user interaction patterns with Spotify's streaming service. Key components of the script include:
