@@ -3,7 +3,7 @@
 To set up the environment: `run conda env create -f conda.yaml`  
 To activate it: `conda activate stream_analytics_project`  
   
-Make sure to have `artists.csv` and `tracks.csv` in the data folder, or specify the paths to the datasets in the main function of `src/data_generator.py` for the functions `serialize_song_data`('[tracks dataset path](https://www.kaggle.com/datasets/yamaerenay/spotify-dataset-19212020-600k-tracks?select=tracks.csv), '[songs dataset path](https://www.kaggle.com/datasets/amitanshjoshi/spotify-1million-tracks)'), and `serialize_artist_data`('[artists dataset path](https://www.kaggle.com/datasets/yamaerenay/spotify-dataset-19212020-600k-tracks?select=tracks.csv)')  
+Make sure to have `artists.csv`, `tracks.csv` and `tracks_extended.csv` in the data folder, or specify the paths to the datasets in the main function of `src/data_generator.py` for the functions `serialize_song_data`('[tracks.csv dataset path](https://www.kaggle.com/datasets/yamaerenay/spotify-dataset-19212020-600k-tracks?select=tracks.csv), '[tracks_extended.csv dataset path](https://www.kaggle.com/datasets/amitanshjoshi/spotify-1million-tracks)'), and `serialize_artist_data`('[artists dataset path](https://www.kaggle.com/datasets/yamaerenay/spotify-dataset-19212020-600k-tracks?select=tracks.csv)')  
   
 To run the simulation and populate the tables: `python3 main.py`
 
@@ -37,7 +37,21 @@ We have developed Python scripts to generate realistic, time-series data reflect
 - **User Events Simulation**: Generation of user-events (song plays) based on randomly assigned personalities and on probabilistic models `src/data_generator.py`: `generate_all_user_events()`.
 
 ## User Events Simulation
+The Events simulation uses 4 classes that were defined in `src/simulation_objects.py`:
+- Personality(): This object contains a randomly generated personality that will influence the user events in the simulation.
+- Track(): This object stores the `track_id` and `listening_time` variables.
+- Session(): This object represents a "session" of listening to music.
+- User(): This object represents individual users, and contains the methods to simulate their listening behavior.  
+  
+The simulation works by looping through every user that was generated in the users.avro table, and running the method `simulate_user_events()` of the `User()` class. The `simulate_user_events()` takes a start_date as an argument, which by default is the 1st of January 2024. It will then simulate the daily listening behaviour for the given user, every day starting from the start_date until the current date.  
+  
+Regarding the daily simulations, we have decided to group them into sessions, because in reality, it is more common to listen to several songs in a row than to randomly play songs with pauses in-between throughout the day.  
+Every day, every user initializes a number of sessions (long sessions and short sessions). Each one of these sessions initializes a number of songs that will be played, by drawing from a normal distribution with different parameters depending on the type of session.
 
+Once we have the sessions and the number of songs for each one of them, we need to decide on which songs will be played (we will come back to this in a moment). Then, we schedule these sessions throughout the day for a given user with the method `allocate_sessions()` of the User object.  
+  
+Going back to the choice of songs, the main challenge here was to generate some data that will allow us to classify the users along one of the 16 personality types of Spotify. These 16 personalities are built on 4 dimensions:
+![spotify four dimensions screenshot](data/4_dimensions.png)
 
 ## Challenges Encountered
 
