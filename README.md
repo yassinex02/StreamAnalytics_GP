@@ -86,6 +86,7 @@ Finally, another important piece is the `listening_time` variable. We want to si
 Some limitations of synthetic data generation include:
 - The fact that the sessions are allocated with a structure of 24 blocks of 1 hour each, means that all the users will start their sessions by playing a song at an exact hour (like 2:00 PM or 3:00 PM). No user will play their first song of a session at say 2:24 PM. (However, the timestamp we are recording is off when the song has finished being played (ended or skipped))
 - If a user skips a song, there is virtually no reason why he would play it again right after (in real life). However, in our simulation, it is not impossible that a user who has just skipped a song would play it again right after if he was randomly assigned to being a **"very_loyal"** user at that given iteration of `get_next_song()`.
+-  The syntethic data generation for the user events could have been more in-depth and complex if we used some features from the songs / users tables as they could add some relevancy ( e.g artist_followers, artist_poplarity, age ...)
 
 ## Challenges Encountered
 The main challenges we encountered were:
