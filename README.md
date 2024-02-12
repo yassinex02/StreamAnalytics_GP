@@ -23,10 +23,10 @@ We also had to do some transformations. We applied K Means clustering to audio f
 
 ### Tables 
 Our group decided on 4 tables. The AVRO schema defines these entities along with their respective attributes and relationships.
-1. **user**: to generate Spotify users, we used the Faker and datetime libraries to provide us with a list of users including a user_id, username, location, birthdate and gender. We defined the type of each variable based on our knowledge of previous similar variables we have seen and used in other datasets.
-2. **track**: introduced variables that were included in the dataset we chose, including track ID, duration, artist, name, popularity, release date, and many more. The type of each variable was defined based on the original type of the variable in the two datasets we used to generate data.
-3. **artist**: contained the ID, followers, name, and popularity variables, all of which were also defined by the type that was given in the original artist dataset.
-4. **event**: This table records whenever a track is played by a user. It contains an id for the record, a timestamp for when this record occured, the track_id of the track that was played, the user_id of the user that played the track, and the listening_time, expressed in miliseconds.
+1. **User**: to generate Spotify users, we used the Faker and datetime libraries to provide us with a list of users including a `user_id`, `username`, `location`, `birthdate` and `gender`. We defined the type of each variable based on our knowledge of previous similar variables we have seen and used in other datasets.
+2. **Track**: introduced variables that were included in the dataset we chose, including `track_id`, `duration`, `artist`, `name`, `popularity`, `release date`, and many more. The type of each variable was defined based on the original type of the variable in the two datasets we used to generate data.
+3. **Artist**: contained the `id`, `followers`, `name`, and `popularity` variables, all of which were also defined by the type that was given in the original artist dataset.
+4. **UserEvent**: This table records whenever a track is played by a user. It contains an `id` for the record, a `timestamp` for when this record occured, the `track_id` of the track that was played, the `user_id` of the user that played the track, and the `listening_time`, expressed in miliseconds.
 
 ## Design of Synthetic Data Generation Scripts
 The synthetic data generation process starts with defining the data schema. The AVRO schema of the previous tables were defined in the file `src/serializer.py`.  
