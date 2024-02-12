@@ -24,7 +24,6 @@ Our group decided on 4 tables. The AVRO schema defines these entities along with
 4. **event**:   
 
 
-
 ## Design of Synthetic Data Generation Scripts
 The synthetic data generation process starts with defining the data schema. The AVRO schema is specified using JSON, describing the structure of the data including data types, field names, and any nested structures. It involves simulating the streaming experiences of both individual users and multiple independent users. We have developed Python scripts to generate realistic, time-series data reflecting typical user interaction patterns with Spotify's streaming service. Key components of the script include:
 - **User Profile Generation**: Random generation of user profiles including demographics, preferences, and listening habits (data_generator.py).
