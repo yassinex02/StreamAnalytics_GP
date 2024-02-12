@@ -5,11 +5,12 @@ from faker import Faker
 from fastavro import writer
 import numpy as np
 import pandas as pd
-from serializer import get_parsed_track_schema, get_parsed_user_schema, \
+from .serializer import get_parsed_track_schema, get_parsed_user_schema, \
     get_parsed_event_schema, get_parsed_artist_schema
 
-from simulation_objects import User
-from utils import read_avro
+import transformation
+from .simulation_objects import User
+from .utils import read_avro
 
 
 def generate_random_birthdates(min_date: datetime, max_date: datetime, n_dates: int):
@@ -161,13 +162,14 @@ def serialize_event_data(all_user_events: list, output_path: str):
 
 
 def main():
-    users = generate_fake_users(n_users=100)
-    serialize_user_data(users)
-    serialize_song_data('../data/tracks.csv','../data/tracks_extended.csv', '../data/tracks.avro')
-    serialize_artist_data('../data/artists.csv', '../data/artists.avro')
-    all_user_events = simulate_all_user_events(users_path="../data/users.avro",
-                                               tracks_path="../data/transformed_tracks.csv")
-    serialize_event_data(all_user_events, output_path="../data/events.avro")
+    users = generate_fake_users(n_users=10000)
+    serialize_user_data(users, 'data/users.avro')
+    serialize_song_data('data/tracks.csv','data/tracks_extended.csv', 'data/tracks.avro')
+    serialize_artist_data('data/artists.csv', 'data/artists.avro')
+    transformation.main()
+    all_user_events = simulate_all_user_events(users_path="data/users.avro",
+                                               tracks_path="data/transformed_tracks.csv")
+    serialize_event_data(all_user_events, output_path="data/events.avro")
 
 
 if __name__ == "__main__":

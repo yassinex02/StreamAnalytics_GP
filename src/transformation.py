@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
-from utils import read_avro, save_to_csv
+from .utils import read_avro, save_to_csv
 
 
 def calculate_newness_score(df_tracks):
