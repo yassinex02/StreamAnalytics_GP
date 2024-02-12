@@ -51,7 +51,7 @@ Every day, every user initializes a number of sessions (long sessions and short 
 Once we have the sessions and the number of songs for each one of them, we need to decide on which songs will be played (we will come back to this in a moment). Then, we schedule these sessions throughout the day for a given user with the method `allocate_sessions()` of the User object.  
   
 Going back to the choice of songs, the main challenge here was to generate some data that will allow us to classify the users along one of the 16 personality types of Spotify. These 16 personalities are built on the following 4 dimensions:  
-![spotify four dimensions screenshot](data/4_dimensions.png)
+![spotify four dimensions screenshot](static/4_dimensions.png)
   
 Looking at these 4 dimensions, we can think about them as two seperate groups in the way we approach the selection of the tracks that will be played by the user:
 - **Dimensions that modify the subset of songs that we draw from**: Familiarity/Exploration, Loyalty/Variety
@@ -71,8 +71,13 @@ In our approach, we define the 8 characteristics as follows:
 - Commonality: The user listens to mainstream songs/artists.
 - Uniqueness: The user listens to more niche songs/artists.
 
-Regarding the first category, we do the following checks:
-- If has the 
+At every iteration of the loop, when a user needs to select the next song to play, he will be either assigned as a **"very loyal"** user (meaning he will play the exact same song), a **"loyal"** user (meaning he will play a song from the same previous artist), a **"familiar"** user (meaning he will play a song from an artist he already played previously), or none of the previous categories, meaning he will randomly sample from the entire distribution of songs. Naturally, if a user has the trait `loyalty` in this `Personality()` type, he will be more likely to be **"very loyal"** or **"loyal"** at any given iteration. Likewise, if a user has the trait `familiarity`, he will be more likely to be a **"familiar"** user at any given iteration.  
+  
+Once we determine the subset of songs that we sample from, we need to rank those options according to some criteria. Here, we want to make sure that users with the trait `timelessness` prefer older songs, while users with the trait `newness` prefer newer songs. For this reason, we rank the song based on their release date (or the transformed version of it that we stored as their `newness_score`). The order of the sorting depends on the trait (timelessness will sort in ascending order while newness in descending order). Then, we sample from the songs with an exponential distribution, because we want the users to have even higher probabilities of randomly selecting songs matching their personalities.  
+
+![exponential_distribution picture](static/exponential_distrib.png)
+
+Listening time
 
 ## Challenges Encountered
 
