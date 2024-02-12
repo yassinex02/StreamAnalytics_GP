@@ -92,7 +92,7 @@ def serialize_song_data(tracks_path: str, df_2_path: str, output_path: str):
     df_merged = pd.merge(df_common_tracks, df_2_selected,
                          left_on='name', right_on='track_name', how='inner')
 
-# Rename the 'artists' column to 'artist'
+# Rename the 'artists' column to 'artist' for later uses
 
     avro_records = df_merged.to_dict(orient='records')
     avro_records_with_schema = []
