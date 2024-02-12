@@ -159,7 +159,7 @@ def main():
     users = generate_fake_users(n_users=2)
     serialize_user_data(users, 'data/users.avro')
     serialize_song_data('data/tracks.csv',
-                        'data/tracks_extended.csv', 'data/tracks.avro')  # datasets have to be in this order , first the tracks
+                        'data/tracks_extended.csv', 'data/tracks.avro')  # datasets have to be in this order , first the tracks dataset then tracks_extended
     serialize_artist_data('data/artists.csv', 'data/artists.avro')
     trsnfrm()
     all_user_events = simulate_all_user_events(users_path="data/users.avro",
