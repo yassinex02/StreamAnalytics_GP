@@ -7,7 +7,6 @@ You need to make sure to have `artists.csv`, `tracks.csv`, and `tracks_extended.
   
 To run the simulation and populate the tables: `python3 main.py`
 
-
 ## Overview
 This repository contains the code and documentation for generating synthetic data for Spotify Wrapped using the AVRO format. The synthetic data generation scripts provided here are designed to align with the needs of our project, facilitating data analysis, testing, and development in a controlled environment.
 
