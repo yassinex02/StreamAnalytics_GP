@@ -61,15 +61,12 @@ def serialize_user_data(users: dict, output_path):
 def serialize_song_data(tracks_path: str, df_2_path: str, output_path: str):
     parsed_track_schema = get_parsed_track_schema()
 
-    # Read data from the CSV files
     df_tracks = pd.read_csv(tracks_path)
     df_2 = pd.read_csv(df_2_path)
 
-    # Drop duplicates based on the 'name' and 'track_name' columns
+    # Drop duplicates and missing values
     df_tracks = df_tracks.drop_duplicates(subset='name', keep='first')
     df_2 = df_2.drop_duplicates(subset='track_name', keep='first')
-
-    # Drop the missing values
     df_tracks = df_tracks.dropna(subset=['id', 'name', 'popularity'])
 
     # Clean and preprocess the data
