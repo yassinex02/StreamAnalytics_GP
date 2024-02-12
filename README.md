@@ -1,7 +1,8 @@
-# Spotify Wrapped Data Feed 
-To set up the environment : run conda env create -f conda.yaml
+# Steps to run the files
+To set up the environment : "run conda env create -f conda.yaml"
+To actiavte it conda :  "conda activate stream_analytics_project"
+To run the simulation and populate the tables :"python data_generator.py" , but first specify the paths to the datasets in the same file at the very bottom in the main function for serialize_song_data('[tracks dataset path](https://www.kaggle.com/datasets/yamaerenay/spotify-dataset-19212020-600k-tracks?select=tracks.csv)', '[songs dataset path](https://www.kaggle.com/datasets/amitanshjoshi/spotify-1million-tracks)' and serialize_artist_data('[artists dataset path](https://www.kaggle.com/datasets/yamaerenay/spotify-dataset-19212020-600k-tracks?select=tracks.csv)')
 
-To actiavte it conda :  e
 
 ## Overview
 This repository contains the code and documentation for generating synthetic data for Spotify Wrapped using the AVRO format. The synthetic data generation scripts provided here are designed to align with the needs of our project, facilitating data analysis, testing, and development in a controlled environment.
