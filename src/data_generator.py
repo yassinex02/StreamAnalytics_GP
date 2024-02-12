@@ -161,11 +161,13 @@ def serialize_event_data(all_user_events: list, output_path: str):
 
 
 def main():
-    #serialize_song_data('data/tracks.csv','data/tracks.avro')
-    #serialize_artist_data('data/artists.csv', 'data/artists.avro')
-    all_user_events = simulate_all_user_events(users_path="data/users.avro",
-                                               tracks_path="data/transformed_tracks.csv")
-    serialize_event_data(all_user_events, output_path="data/events.avro")
+    users = generate_fake_users(n_users=100)
+    serialize_user_data(users)
+    serialize_song_data('../data/tracks.csv','../data/tracks.avro')
+    serialize_artist_data('../data/artists.csv', '../data/artists.avro')
+    all_user_events = simulate_all_user_events(users_path="../data/users.avro",
+                                               tracks_path="../data/transformed_tracks.csv")
+    serialize_event_data(all_user_events, output_path="../data/events.avro")
 
 
 if __name__ == "__main__":
