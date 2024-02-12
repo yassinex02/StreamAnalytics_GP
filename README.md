@@ -21,19 +21,24 @@ Our group decided on 4 tables. The AVRO schema defines these entities along with
 1. **user**: to generate Spotify users, we used the Faker and datetime libraries to provide us with a list of users including their ID, username, location, birthdate, gender, and favorite genre. We defined the type of each variable based on our knowledge of previous similar variables we have seen and used in other datasets.
 2. **track**: introduced variables that were included in the dataset we chose, including track ID, duration, artist, name, popularity, release date, and many more. The type of each variable was defined based on the original type of the variable in the dataset provided to us.
 3. **artist**: contained the ID, followers, name, and popularity variables, all of which were also defined by the type that was given in the original dataset.
-4. **event**: a user event consists of an event ID, timestamp of the event, track ID, user ID, and listening time, which is how long the user plays the song for. The type of the fields was assigned based on patterns seen in similar/ indentical fields in the other tables.
+4. **event**: a user event consists of an event ID, timestamp of the event, track ID, user ID, and listening time, which is how long the user plays the song for. The type of the fields was assigned based on patterns seen in similar/ indentical fields in the other tables. We excluded the field action because we chose only to record the action of when a user plays a song instead of recording pauses, skips, etc.
 
 ## Design of Synthetic Data Generation Scripts
 The synthetic data generation process starts with defining the data schema. The AVRO schema is specified using JSON, describing the structure of the data including data types, field names, and any nested structures. It involves simulating the streaming experiences of both individual users and multiple independent users. We have developed Python scripts to generate realistic, time-series data reflecting typical user interaction patterns with Spotify's streaming service. Key components of the script include:
-- **User Profile Generation**: Random generation of user profiles including demographics, preferences, and listening habits (data_generator.py).
-- **Song Catalog Simulation**: Creation of a simulated song catalog with diverse genres, artists, and popularity metrics (main.py).
-- **User Interaction Simulation**: Generation of user interactions such as song plays, skips, likes, and playlist creations based on probabilistic models (main.py).
-- **Data Serialization**: Transformation of generated data into AVRO format adhering to the defined schema (serializer.py).
+- **User Profile Generation**: Random generation of user profiles including demographics, preferences, and listening habits.
+- **Song Catalog Simulation**: Creation of a simulated song catalog with diverse genres, artists, and popularity metrics.
+- **User Interaction Simulation**: Generation of user interactions such as song plays, and playlist creations based on probabilistic models.
+- **Data Serialization**: Transformation of generated data into AVRO format adhering to the defined schema.
 
+Listening personalities (are introduced by categorizing songs and user interactions; each user's behavior is simulated with variations introduced to reflect diverse user preferences and interactions. Below is an image outlining the binary attributes we took into account to measure and describe an aspect of how a user listens to music, independent of what music they like. These include familiarity vs. exploration, timelessness vs. newness, loyalty vs. variety, and commonality vs. uniqueness. 
 
+![image](https://github.com/yassinex02/StreamAnalytics_GP/assets/144900363/4690d27c-2f7d-4820-83bd-c69e2b54b3ed)
+
+### Code Structure 
+maybe here we can add the order of the scripts and how to run everything?
 
 ## Challenges Encountered
-
+mention any chanllenges encountered here 
 
 ## Alignment of the Synthetic Data with Project Needs
 The synthetic data generated closely aligns with the project's needs by providing a representative sample of user interactions and streaming experiences. It comprehensively reflects a similar structure to that seen in real-world data. The data feed enables analytics and insights generation for Spotify Wrapped, facilitating personalized user experiences and recommendations. Moving forward, continuous refinement and expansion of the data feed will further enhance its utility and relevance in understanding user preferences and enhancing the Spotify experience.
