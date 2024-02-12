@@ -71,15 +71,28 @@ In our approach, we define the 8 characteristics as follows:
 - Commonality: The user listens to mainstream songs/artists.
 - Uniqueness: The user listens to more niche songs/artists.
 
-At every iteration of the loop, when a user needs to select the next song to play, he will be either assigned as a **"very loyal"** user (meaning he will play the exact same song), a **"loyal"** user (meaning he will play a song from the same previous artist), a **"familiar"** user (meaning he will play a song from an artist he already played previously), or none of the previous categories, meaning he will randomly sample from the entire distribution of songs. Naturally, if a user has the trait `loyalty` in this `Personality()` type, he will be more likely to be **"very loyal"** or **"loyal"** at any given iteration. Likewise, if a user has the trait `familiarity`, he will be more likely to be a **"familiar"** user at any given iteration.  
+At every iteration of the loop, when a user needs to select the next song to play, he will be either assigned as a **"very loyal"** user (meaning he will play the exact same song), a **"loyal"** user (meaning he will play a song from the same previous artist), a **"familiar"** user (meaning he will play a song from an artist he already played previously), or none of the previous categories, meaning he will randomly sample from the entire distribution of songs. Naturally, if a user has the trait `loyalty` in his `Personality()` type, he will be more likely to be **"very loyal"** or **"loyal"** at any given iteration. Likewise, if a user has the trait `familiarity`, he will be more likely to be a **"familiar"** user at any given iteration.  
   
-Once we determine the subset of songs that we sample from, we need to rank those options according to some criteria. Here, we want to make sure that users with the trait `timelessness` prefer older songs, while users with the trait `newness` prefer newer songs. For this reason, we rank the song based on their release date (or the transformed version of it that we stored as their `newness_score`). The order of the sorting depends on the trait (timelessness will sort in ascending order while newness in descending order). Then, we sample from the songs with an exponential distribution, because we want the users to have even higher probabilities of randomly selecting songs matching their personalities.  
+Once we determine the subset of songs that we sample from, we need to rank those options according to some criteria. Here, we want to make sure that users with the trait `timelessness` prefer older songs, while users with the trait `newness` prefer newer songs. For this reason, we rank the songs based on their release date (or the transformed version of it that we stored as their `newness_score`). The order of the sorting depends on the trait (timelessness will sort in ascending order while newness in descending order). Then, we sample from the songs with an exponential distribution, because we want the users to have even higher probabilities of randomly selecting songs matching their personalities.  
 
 ![exponential_distribution picture](static/exponential_distrib.png)
 
-Listening time
+The lambda parameter of the exponential distribution that we decided to go with is "3/n_songs" (as you can see on the plot), because we have found that this value gives a reasonably low probability of the x sampled being greater than the total number of songs we sample from (in which case we just take the last song).
+
+Regarding the fourth dimension of **Commonality/Uniqueness**, we could have used the popularity of artists, or even computed our own metrics during the simulation to keep track of mainstream and not so mainstream songs. However, we decided that we do not need to use it in the synthetic data generation, because naturally, by random process, some users will end up choosing mainstream artists/songs while others will go for less popular songs, so this is rather a characteristic that we will observe in the analytics phase of the project in order to classify our simulated users into one of the 16 personalities of Spotify Wrapped.
+  
+Finally, another important piece is the `listening_time` variable. We want to simulate the fact that sometiemes users don't listen to a song from start to finish, but skip to the next song. Therefore, in some records (1/3 of the records in this version), we say that the user will skip the song after a number of seconds x that is sampled from an exponential distribution with `lambda = 1/song_duration`. This means that the longer the user listens to the song, the less likely he is to skip it, which is a realistic assumption.
+
+## Limitations
+Some limitations of the synthetic data generation include:
+- The fact that the sessions are allocated with a structure of 24 blocks of 1 hour each, which means that all the users will start their sessions by playing a song at an exact hour (like 2:00PM or 3:00PM). No user will play their first song of a session at say 2:24PM. (However, the timestamp we are recording is of when the song has finished being played (ended or skipped))
+- If a user skips a song, there is virtually no reason why he would play it again right after (in real life). However, in our simulation, it is not impossible that a user who has just skipped a song, would play it again right after if he was randomly assigned to being a **"very_loyal"** user at that given iteration of `get_next_song()`.
 
 ## Challenges Encountered
+The main challenges we encountered were:
+- Designing the process of the simulation. 
+- Designing the mechanisms of personality traits.
+- Translating the designs into code.
 
 
 ## Alignment of the Synthetic Data with Project Needs
