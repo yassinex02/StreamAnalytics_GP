@@ -3,7 +3,7 @@
 To set up the environment: "run conda env create -f conda.yaml"  
 To activate it: "conda activate stream_analytics_project" 
   
-Make sure to have `artists.csv` and `tracks.csv` in the data folder, or specify the paths to the datasets in the main function of `src/data_generator.py` for the `function serialize_song_data('[tracks dataset path](https://www.kaggle.com/datasets/yamaerenay/spotify-dataset-19212020-600k-tracks?select=tracks.csv)', '[songs dataset path](https://www.kaggle.com/datasets/amitanshjoshi/spotify-1million-tracks)')`, and `serialize_artist_data('[artists dataset path](https://www.kaggle.com/datasets/yamaerenay/spotify-dataset-19212020-600k-tracks?select=tracks.csv)')`  
+Make sure to have `artists.csv` and `tracks.csv` in the data folder, or specify the paths to the datasets in the main function of `src/data_generator.py` for the `function serialize_song_data`('[tracks dataset path](https://www.kaggle.com/datasets/yamaerenay/spotify-dataset-19212020-600k-tracks?select=tracks.csv), '[songs dataset path](https://www.kaggle.com/datasets/amitanshjoshi/spotify-1million-tracks)'), and `serialize_artist_data`('[artists dataset path](https://www.kaggle.com/datasets/yamaerenay/spotify-dataset-19212020-600k-tracks?select=tracks.csv)')  
   
 To run the simulation and populate the tables: "python3 main.py"
 
