@@ -1,8 +1,8 @@
-# Steps to run the files
+# Spotify Wrapped Data Feed 
+## Steps to run the files
 To set up the environment : "run conda env create -f conda.yaml"  
 To actiavte it conda :  "conda activate stream_analytics_project"  
 To run the simulation and populate the tables :"python data_generator.py" , but first specify the paths to the datasets in the same file at the very bottom in the main function for serialize_song_data('[tracks dataset path](https://www.kaggle.com/datasets/yamaerenay/spotify-dataset-19212020-600k-tracks?select=tracks.csv)', '[songs dataset path](https://www.kaggle.com/datasets/amitanshjoshi/spotify-1million-tracks)' and serialize_artist_data('[artists dataset path](https://www.kaggle.com/datasets/yamaerenay/spotify-dataset-19212020-600k-tracks?select=tracks.csv)')
-
 
 ## Overview
 This repository contains the code and documentation for generating synthetic data for Spotify Wrapped using the AVRO format. The synthetic data generation scripts provided here are designed to align with the needs of our project, facilitating data analysis, testing, and development in a controlled environment.
@@ -24,15 +24,14 @@ Our group decided on 4 tables. The AVRO schema defines these entities along with
 3. **artist**: contained the ID, followers, name, and popularity variables, all of which were also defined by the type that was given in the original artist dataset.
 4. **event**:   
 
-
 ## Design of Synthetic Data Generation Scripts
-The synthetic data generation process starts with defining the data schema. This AVRO schema describes the structure of the data including data types, field names, and any nested structures. It involves simulating the streaming experiences of n (10000 in our case ) individual users . ## We have developed Python scripts to generate realistic, time-series data reflecting typical user interaction patterns with Spotify's streaming service. Key components of the script include:
+The synthetic data generation process starts with defining the data schema. This AVRO schema describes the structure of the data including data types, field names, and any nested structures. It involves simulating the streaming experiences of n (10000 in our case ) individual users . 
+
+We have developed Python scripts to generate realistic, time-series data reflecting typical user interaction patterns with Spotify's streaming service. Key components of the script include:
 - **User Profile Generation**: Random generation of user profiles including demographics, preferences, and listening habits (data_generator.py).
 - **Song Catalog Simulation**: Creation of a simulated song catalog with diverse genres, artists, and popularity metrics (main.py).
 - **User Interaction Simulation**: Generation of user interactions such as song plays, skips, likes, and playlist creations based on probabilistic models (main.py).
 - **Data Serialization**: Transformation of generated data into AVRO format adhering to the defined schema (serializer.py).
-
-
 
 ## Challenges Encountered
 
