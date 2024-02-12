@@ -77,12 +77,8 @@ def serialize_song_data(tracks_path: str, df_2_path: str, output_path: str):
 
     # Find common songs
     common_songs = set(df_tracks['name']).intersection(df_2['track_name'])
-
-    # Create datasets with only common songs
     df_common_tracks = df_tracks[df_tracks['name'].isin(common_songs)]
     df_common_2 = df_2[df_2['track_name'].isin(common_songs)]
-
-    # Select columns from df_2
     df_2_selected = df_common_2[['track_name', 'album_name', 'track_genre']]
 
     # Perform join on common song names
