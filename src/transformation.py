@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
-from .utils import read_avro, save_to_csv
+from utils import read_avro, save_to_csv
 
 
 def calculate_newness_score(df_tracks):
@@ -58,18 +58,18 @@ def create_final_dataframe(df_merged):
     return df_final
 
 
-def main():
-    df_tracks = read_avro('../data/tracks.avro')
-    df_artists = read_avro('../data/artists.avro')
+def trsnfrm():
+    df_tracks = read_avro('data/tracks.avro')
+    df_artists = read_avro('data/artists.avro')
 
     calculate_newness_score(df_tracks)
     cluster_audio_features(df_tracks)
     df_merged = merge_artists(df_tracks, df_artists)
     df_final = create_final_dataframe(df_merged)
 
-    save_to_csv(df_final, '../data/transformed_tracks.csv')
+    save_to_csv(df_final, 'data/transformed_tracks.csv')
     return df_final
 
 
 if __name__ == "__main__":
-    main()
+    trnsfrm()
