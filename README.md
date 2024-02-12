@@ -38,10 +38,10 @@ We have developed Python scripts to generate realistic, time-series data reflect
 
 ## User Events Simulation
 The Events simulation uses 4 classes that were defined in `src/simulation_objects.py`:
-- Personality(): This object contains a randomly generated personality that will influence the user events in the simulation.
-- Track(): This object stores the `track_id` and `listening_time` variables.
-- Session(): This object represents a "session" of listening to music.
-- User(): This object represents individual users, and contains the methods to simulate their listening behavior.  
+- `Personality()`: This object contains a randomly generated personality that will influence the user events in the simulation.
+- `Track()`: This object stores the `track_id` and `listening_time` variables.
+- `Session()`: This object represents a "session" of listening to music.
+- `User()`: This object represents individual users, and contains the methods to simulate their listening behavior.  
   
 The simulation works by looping through every user that was generated in the users.avro table, and running the method `simulate_user_events()` of the `User()` class. The `simulate_user_events()` takes a start_date as an argument, which by default is the 1st of January 2024. It will then simulate the daily listening behaviour for the given user, every day starting from the start_date until the current date.  
   
@@ -50,8 +50,29 @@ Every day, every user initializes a number of sessions (long sessions and short 
 
 Once we have the sessions and the number of songs for each one of them, we need to decide on which songs will be played (we will come back to this in a moment). Then, we schedule these sessions throughout the day for a given user with the method `allocate_sessions()` of the User object.  
   
-Going back to the choice of songs, the main challenge here was to generate some data that will allow us to classify the users along one of the 16 personality types of Spotify. These 16 personalities are built on 4 dimensions:
+Going back to the choice of songs, the main challenge here was to generate some data that will allow us to classify the users along one of the 16 personality types of Spotify. These 16 personalities are built on the following 4 dimensions:  
 ![spotify four dimensions screenshot](data/4_dimensions.png)
+  
+Looking at these 4 dimensions, we can think about them as two seperate groups in the way we approach the selection of the tracks that will be played by the user:
+- **Dimensions that modify the subset of songs that we draw from**: Familiarity/Exploration, Loyalty/Variety
+- **Dimensions that modify the weights or the order of the songs that we draw**: Timelessness/Newness, Commonality/Uniqueness.
+  
+In our approach, we define the 8 characteristics as follows:  
+  
+- Familiarity: If a user has the familiarity trait, it means that he will have a higher chance of listening to an artist he has already played before.
+- Exploration: If a user has the exploration trait, he will have a lower chance of listening to an artist he has already played before (lower in relative terms compared to a user with familiarity)
+  
+- Loyalty: If a user has the loyalty trait, he will be more likely to listen to the same artist he listened to previously, or to listen to the exact same song he previously played.
+- Variety: By contrast to loyalty, will have a lower probability of playing same song or same artist.
+  
+- Timelessness: The user will be more likely to play older songs all else equal.
+- Newness: The user will be more likely to play newer songs all else equal.
+  
+- Commonality: The user listens to mainstream songs/artists.
+- Uniqueness: The user listens to more niche songs/artists.
+
+Regarding the first category, we do the following checks:
+- If has the 
 
 ## Challenges Encountered
 
