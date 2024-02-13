@@ -30,10 +30,10 @@ Our group decided on 4 tables. The AVRO schema defines these entities along with
 
 ## Design of Synthetic Data Generation Scripts
 The synthetic data generation process starts with defining the data schema. The AVRO schema of the previous tables were defined in the file `src/serializer.py`.  
-Our synthetic data generation scripts involves simulating the streaming experiences of n individual users (in our cases 100 users). 
+Our synthetic data generation scripts involves simulating the streaming experiences of n individual users (in our cases 1,000 users). The `tracks.avro` file has 26,111 records. With 1,000 records in `users.avro`, we get around 1,469,771 records in `events.avro` (this number varies, as the number of sessions and number of songs per session is not deterministic).
 
 We have developed Python scripts to generate realistic, time-series data reflecting typical user interaction patterns with Spotify's streaming service. Key components of the script include:
-- **User Profile Generation**: Random generation of n user profiles including demographics (birthdate, gender, location). `src/data_generator.py`: `generate_fake_users(n_users=100)`.
+- **User Profile Generation**: Random generation of n user profiles including demographics (birthdate, gender, location). `src/data_generator.py`: `generate_fake_users(n_users=1000)`.
 - **User Events Simulation**: Generation of user-events (song plays) based on randomly assigned personalities and on probabilistic models `src/data_generator.py`: `generate_all_user_events()`.
 
 ## User Events Simulation
@@ -85,6 +85,8 @@ Finally, another important piece is the `listening_time` variable. We want to si
 
 ## Limitations
 Some limitations of the synthetic data generation include:
+- All the timestamps are treated as UTC time.
+- Sessions are scheduled with a uniform distribution throughout the day, which means that it is not anormal to see the same user listening to music at 4:00 AM as well as 10:00 AM or 2:00 PM.
 - The fact that the sessions are allocated with a structure of 24 blocks of 1 hour each, which means that all the users will start their sessions by playing a song at an exact hour (like 2:00PM or 3:00PM). No user will play their first song of a session at say 2:24PM. (However, the timestamp we are recording is of when the song has finished being played (ended or skipped))
 - If a user skips a song, there is virtually no reason why he would play it again right after (in real life). However, in our simulation, it is not impossible that a user who has just skipped a song, would play it again right after if he was randomly assigned to being a **"very_loyal"** user at that given iteration of `get_next_song()`.
 
