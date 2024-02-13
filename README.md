@@ -108,7 +108,6 @@ The synthetic data generated closely aligns with the project's needs by providin
 - **Schema Name:** UserEvent
 - **Namespace:** com.spotify.wrapped
 - **Type:** Record
-- **Description:** Represents a user event in the Spotify Wrapped Data Feed.
 
 ### 1.2 Fields
 
@@ -125,13 +124,12 @@ The synthetic data generated closely aligns with the project's needs by providin
 - **Schema Name:** User
 - **Namespace:** com.spotify.wrapped
 - **Type:** Record
-- **Description:** Represents user information in the Spotify Wrapped Data Feed.
 
 ### 2.2 Fields
 
 1. **user_id (long):** Unique identifier for the user.
 2. **username (string):** User's username.
-3. **location (string):** User's location.
+3. **location (string):** User's country.
 4. **birthdate (string with logicalType date):** User's birthdate.
 5. **gender (string with symbols ["M", "F"]):** User's gender.
 
@@ -142,7 +140,6 @@ The synthetic data generated closely aligns with the project's needs by providin
 - **Schema Name:** Track
 - **Namespace:** com.spotify.wrapped
 - **Type:** Record
-- **Description:** Represents track information in the Spotify Wrapped Data Feed.
 
 ### 3.2 Fields
 
@@ -174,7 +171,6 @@ The synthetic data generated closely aligns with the project's needs by providin
 - **Schema Name:** Artist
 - **Namespace:** com.spotify.wrapped
 - **Type:** Record
-- **Description:** Represents artist information in the Spotify Wrapped Data Feed.
 
 ### 4.2 Fields
 
