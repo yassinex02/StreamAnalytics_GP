@@ -3,7 +3,7 @@
 To set up the environment: `run conda env create -f conda.yaml`  
 To activate it: `conda activate stream_analytics_project`  
   
-Make sure to have `artists.csv`, `tracks.csv` and `tracks_extended.csv` in the data folder, or specify the paths to the datasets in the main function of `src/data_generator.py` for the functions `serialize_song_data`('[tracks.csv dataset path](https://www.kaggle.com/datasets/yamaerenay/spotify-dataset-19212020-600k-tracks?select=tracks.csv), '[tracks_extended.csv dataset path](https://www.kaggle.com/datasets/amitanshjoshi/spotify-1million-tracks)'), and `serialize_artist_data`('[artists dataset path](https://www.kaggle.com/datasets/yamaerenay/spotify-dataset-19212020-600k-tracks?select=tracks.csv)')  
+Make sure to have `artists.csv`, `tracks.csv` and `tracks_extended.csv` in the data folder, or specify the paths to the datasets in the main function of `src/data_generator.py` for the functions `serialize_song_data`('[tracks.csv dataset path](https://www.kaggle.com/datasets/yamaerenay/spotify-dataset-19212020-600k-tracks?select=tracks.csv), '[tracks_extended.csv dataset path](https://www.kaggle.com/datasets/maharshipandya/-spotify-tracks-dataset'), and `serialize_artist_data`('[artists dataset path](https://www.kaggle.com/datasets/yamaerenay/spotify-dataset-19212020-600k-tracks?select=tracks.csv)')  
   
 To run the simulation and populate the tables: `python3 main.py`
 
@@ -30,10 +30,10 @@ Our group decided on 4 tables. The AVRO schema defines these entities along with
 
 ## Design of Synthetic Data Generation Scripts
 The synthetic data generation process starts with defining the data schema. The AVRO schema of the previous tables were defined in the file `src/serializer.py`.  
-Our synthetic data generation scripts involves simulating the streaming experiences of n individual users (in our cases 10,000 users). 
+Our synthetic data generation scripts involves simulating the streaming experiences of n individual users (in our cases 100 users). 
 
 We have developed Python scripts to generate realistic, time-series data reflecting typical user interaction patterns with Spotify's streaming service. Key components of the script include:
-- **User Profile Generation**: Random generation of n user profiles including demographics (birthdate, gender, location). `src/data_generator.py`: `generate_fake_users(n_users=10000)`.
+- **User Profile Generation**: Random generation of n user profiles including demographics (birthdate, gender, location). `src/data_generator.py`: `generate_fake_users(n_users=100)`.
 - **User Events Simulation**: Generation of user-events (song plays) based on randomly assigned personalities and on probabilistic models `src/data_generator.py`: `generate_all_user_events()`.
 
 ## User Events Simulation
