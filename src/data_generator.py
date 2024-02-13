@@ -162,7 +162,7 @@ def serialize_event_data(all_user_events: list, output_path: str):
 
 
 def main():
-    users = generate_fake_users(n_users=100)
+    users = generate_fake_users(n_users=1000)
     serialize_user_data(users, 'data/users.avro')
     serialize_song_data('data/tracks.csv','data/tracks_extended.csv', 'data/tracks.avro')
     serialize_artist_data('data/artists.csv', 'data/artists.avro')
