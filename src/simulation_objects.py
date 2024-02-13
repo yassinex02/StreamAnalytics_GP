@@ -227,11 +227,12 @@ class User():
             available_slots = [slot for slot, availability in slots_availability.items() if availability]
             random.shuffle(available_slots)
             for slot in available_slots:
-                if all(slots_availability[i] for i in range(slot, slot + n_slots)):
-                    session_schedule[session] = slot
-                    for i in range(slot, slot + n_slots):
-                        slots_availability[i] = False
-                    break
+                if slot + n_slots <= 24:
+                    if all(slots_availability[i] for i in range(slot, slot + n_slots)):
+                        session_schedule[session] = slot
+                        for i in range(slot, slot + n_slots):
+                            slots_availability[i] = False
+                        break
             if session not in session_schedule:
                 print(f"Could not find a slot for {session}")
 
