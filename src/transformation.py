@@ -59,15 +59,15 @@ def create_final_dataframe(df_merged):
 
 
 def main():
-    df_tracks = read_avro('../data/tracks.avro')
-    df_artists = read_avro('../data/artists.avro')
+    df_tracks = read_avro('data/tracks.avro')
+    df_artists = read_avro('data/artists.avro')
 
     calculate_newness_score(df_tracks)
     cluster_audio_features(df_tracks)
     df_merged = merge_artists(df_tracks, df_artists)
     df_final = create_final_dataframe(df_merged)
 
-    save_to_csv(df_final, '../data/transformed_tracks.csv')
+    save_to_csv(df_final, 'data/transformed_tracks.csv')
     return df_final
 
 
