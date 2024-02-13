@@ -100,6 +100,74 @@ The main challenges we encountered were:
 ## Alignment of the Synthetic Data with Project Needs
 The synthetic data generated closely aligns with the project's needs by providing a representative sample of user interactions and streaming experiences. It comprehensively reflects a similar structure to that seen in real-world data. The data feed enables analytics and insights generation for Spotify Wrapped, facilitating personalized user experiences and recommendations. Moving forward, continuous refinement and expansion of the data feed will further enhance its utility and relevance in understanding user preferences and enhancing the Spotify experience.
 
+## Detailed Avro Schema
+1. **User Event Schema**
+**1.1 Schema Details**
+Schema Name: UserEvent
+Namespace: com.spotify.wrapped
+Type: Record
+Description: Represents a user event in the Spotify Wrapped Data Feed.
+**1.2 Fields**
+id (long): Unique identifier for the user event.
+timestamp (string with logicalType timestamp-millis): Timestamp of the user event.
+track_id (string): Identifier of the tracked item.
+user_id (long): Unique identifier for the user associated with the event.
+listening_time (long): Duration of listening time for the track.
+
+**2. User Schema**
+
+**2.1 Schema Details**
+Schema Name: User
+Namespace: com.spotify.wrapped
+Type: Record
+Description: Represents user information in the Spotify Wrapped Data Feed.
+**2.2 Fields**
+user_id (long): Unique identifier for the user.
+username (string): User's username.
+location (string): User's location.
+birthdate (string with logicalType date): User's birthdate.
+gender (string with symbols ["M", "F"]): User's gender.
+**3. Track Schema**
+
+**3.1 Schema Details**
+Schema Name: Track
+Namespace: com.spotify.wrapped
+Type: Record
+Description: Represents track information in the Spotify Wrapped Data Feed.
+**3.2 Fields**
+track_id (string): Unique identifier for the track.
+duration (int with default 0): Duration of the track.
+artist (string): Artist of the track.
+name (string or null with default null): Name of the track.
+popularity (int or null with default null): Popularity of the track.
+release_date (string or null with default null): Release date of the track.
+danceability (float with default 0.0): Danceability score of the track.
+energy (float with default 0.0): Energy score of the track.
+key (int with default 0): Key of the track.
+loudness (float with default 0.0): Loudness score of the track.
+mode (int with default 0): Mode of the track.
+speechiness (float with default 0.0): Speechiness score of the track.
+acousticness (float with default 0.0): Acousticness score of the track.
+instrumentalness (float with default 0.0): Instrumentalness score of the track.
+liveness (float with default 0.0): Liveness score of the track.
+valence (float with default 0.0): Valence score of the track.
+tempo (float with default 0.0): Tempo of the track.
+time_signature (int with default 0): Time signature of the track.
+album_name (string or null with default null): Name of the album containing the track.
+track_genre (string or null with default null): Genre of the track.
+**4. Artist Schema**
+
+**4.1 Schema Details**
+Schema Name: Artist
+Namespace: com.spotify.wrapped
+Type: Record
+Description: Represents artist information in the Spotify Wrapped Data Feed.
+**4.2 Fields**
+id (string): Unique identifier for the artist.
+followers (float or null with default null): Number of followers for the artist.
+name (string or null with default null): Name of the artist.
+popularity (int with default 0): Popularity score of the artist.
+
 ## Credits
 The authors of this project are:
 1. Taha Yassine Moumni
