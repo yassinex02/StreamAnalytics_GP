@@ -9,7 +9,7 @@ import pandas as pd
 from serializer import get_parsed_track_schema, get_parsed_user_schema, \
     get_parsed_event_schema, get_parsed_artist_schema
 from simulation_objects import User
-from transformation import trsnfrm
+from transformation import transform_main
 from utils import read_avro
 
 
@@ -156,13 +156,13 @@ def serialize_event_data(all_user_events: list, output_path: str):
 
 
 def main():
-    users = generate_fake_users(n_users=2)
+    users = generate_fake_users(n_users=1000)
     serialize_user_data(users, 'data/users.avro')
     serialize_song_data('data/tracks.csv',
                         'data/tracks_extended.csv', 'data/tracks.avro')  # datasets have to be in this order , first the tracks dataset then tracks_extended the output path
 
     serialize_artist_data('data/artists.csv', 'data/artists.avro')
-    trsnfrm()
+    transform_main()
     all_user_events = simulate_all_user_events(users_path="data/users.avro",
                                                tracks_path="data/transformed_tracks.csv")
     serialize_event_data(all_user_events, output_path="data/events.avro")

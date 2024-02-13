@@ -58,7 +58,7 @@ def create_final_dataframe(df_merged):
     return df_final
 
 
-def trsnfrm():
+def transform_main():
     df_tracks = read_avro('data/tracks.avro')
     df_artists = read_avro('data/artists.avro')
 
@@ -72,4 +72,4 @@ def trsnfrm():
 
 
 if __name__ == "__main__":
-    trnsfrm()
+    transform_main()
