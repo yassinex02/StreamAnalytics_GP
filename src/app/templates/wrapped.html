@@ -14,11 +14,10 @@
             <br>
             <p>Your listening personality type is:</p>
             <p><span class="personality-type">{{ personality_type }}</span></p>
-            <ul>
-                <li>{{ first_trait }}</li>
-                <li>{{ second_trait }}</li>
-                <li>{{ third_trait }}</li>
-                <li>{{ fourth_trait }}</li>
+            <ul id="personalityTraits">
+                {% for trait in personality_traits %}
+                <li>{{ trait }}</li>
+                {% endfor %}
             </ul>
         </div>
     </div>

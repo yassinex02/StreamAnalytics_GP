@@ -4,8 +4,6 @@ body {
     color: #ffffff;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
     align-items: center;
     height: 100vh;
 }
@@ -66,15 +64,48 @@ ul {
     display: inline-block;
 }
 
-li {
+#personalityTraits li {
     font-size: 1rem; 
     display: inline-block;
     margin-bottom: 5px; 
     font-weight: bold;
 }
 
-li:not(:last-child)::after {
+#personalityTraits li:not(:last-child)::after {
     content: "|";
-    margin-left: 20px; 
+    margin-left: 55px; 
     margin-right: 20px;
+}
+
+li {
+    font-size: 1rem; 
+    margin: 20px; 
+}
+
+#weeklyButton[disabled], #monthlyButton[disabled] {
+    background-color: #1db954; 
+    color: #ffffff; 
+    cursor: not-allowed; 
+}
+
+#weeklyButton, #monthlyButton {
+    background-color: #dddddd; 
+    color: #999999;
+}
+
+
+#weeklyAnalytics, #monthlyAnalytics {
+    overflow: hidden; /* Clear floats */
+}
+#weeklyAnalytics ul,
+#monthlyAnalytics ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    float: left; 
+    width: 50%; 
+}
+#weeklyAnalytics ul:nth-child(2),
+#monthlyAnalytics ul:nth-child(2) {
+    float: right; 
 }

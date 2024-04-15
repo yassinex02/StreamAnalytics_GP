@@ -14,6 +14,78 @@
             <input type="text" name="user_input">
             <button type="submit">Wrap!</button>
         </form>
+
+        <h2 style="margin-top: 100px;">Stream analytics of the current:</h2>
+        <div id="analyticsButtons" style="margin-top: 0px;">
+            <button id="weeklyButton" class="button">Week</button>
+            <button id="monthlyButton" class="button">Month</button>
+        </div>
+
+        <div id="analyticsSection">
+            <div id="weeklyAnalytics" style="margin: 30px; display: none;">
+                <div class="list-wrapper">
+                    <ul id="topSongsWeek">
+                        <h3>Top Songs</h3>
+                        {% for song in top_songs_week %}
+                        <li>- {{ song }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="list-wrapper">
+                    <ul id="topArtistsWeek">
+                        <h3>Top Artists</h3>
+                        {% for artist in top_artists_week %}
+                        <li>- {{ artist }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div id="monthlyAnalytics" style="margin: 30px; display: none;">
+                <div class="list-wrapper">
+                    <ul id="topSongsMonth">
+                        <h3>Top Songs</h3>
+                        {% for song in top_songs_month %}
+                        <li>- {{ song }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="list-wrapper">
+                    <ul id="topArtistsMonth">
+                        <h3>Top Artists</h3>
+                        {% for artist in top_artists_month %}
+                        <li>- {{ artist }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            
+        </div>
     </div>
+
+    <script>
+        var weeklyButton = document.getElementById('weeklyButton');
+        var monthlyButton = document.getElementById('monthlyButton');
+        var weeklyAnalytics = document.getElementById('weeklyAnalytics');
+        var monthlyAnalytics = document.getElementById('monthlyAnalytics');
+
+        weeklyButton.addEventListener('click', function() {
+            weeklyAnalytics.style.display = 'block';
+            monthlyAnalytics.style.display = 'none';
+            weeklyButton.classList.add('active');
+            monthlyButton.classList.remove('active');
+            weeklyButton.disabled = true;
+            monthlyButton.disabled = false;
+        });
+
+        monthlyButton.addEventListener('click', function() {
+            weeklyAnalytics.style.display = 'none';
+            monthlyAnalytics.style.display = 'block';
+            monthlyButton.classList.add('active');
+            weeklyButton.classList.remove('active');
+            monthlyButton.disabled = true;
+            weeklyButton.disabled = false;
+        });
+    </script>
 </body>
 </html>
