@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Wrapped</title>
+    <link rel="stylesheet" type="text/css" href="../static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to your Wrapped!</h1>
+        <div>
+            <p>User ID: <span>{{ user_id }}</span></p>
+            <p>Personality Type: <span>{{ personality_type }}</span></p>
+            <img src="{{ personality_image }}" alt="Personality Image">
+        </div>
+    </div>
+</body>
+</html>
