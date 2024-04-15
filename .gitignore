@@ -3,3 +3,5 @@ __pycache__/
 data/tracks.csv
 data/artists.csv
 data/tracks_extended.csv
+analytics/
+src/analytics/personality.py
