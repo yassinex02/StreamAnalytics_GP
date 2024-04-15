@@ -9,14 +9,22 @@ body {
     align-items: center;
     height: 100vh;
 }
+
+.container {
+    text-align: center;
+    padding: 20px;
+}
+
 h1 {
     font-size: 2rem;
     margin-bottom: 20px;
 }
+
 p {
     font-size: 1.2rem;
     margin-bottom: 10px;
 }
+
 input[type="text"] {
     padding: 10px;
     font-size: 1rem;
@@ -24,6 +32,7 @@ input[type="text"] {
     border-radius: 5px;
     margin-right: 10px;
 }
+
 button {
     padding: 10px 20px;
     font-size: 1rem;
@@ -34,6 +43,38 @@ button {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
+
 button:hover {
     background-color: #1ed760;
+}
+
+img {
+    margin-top: 20px;
+    max-width: 100%;
+}
+
+.personality-type {
+    display: block; 
+    font-size: 70px;
+    color: #1db954; 
+    font-weight: bold;
+}
+
+ul {
+    list-style-type: none; 
+    padding: 0;
+    display: inline-block;
+}
+
+li {
+    font-size: 1rem; 
+    display: inline-block;
+    margin-bottom: 5px; 
+    font-weight: bold;
+}
+
+li:not(:last-child)::after {
+    content: "|";
+    margin-left: 20px; 
+    margin-right: 20px;
 }

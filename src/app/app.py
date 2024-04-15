@@ -14,9 +14,15 @@ def index():
 
 @app.route('/wrapped/<user_id>')
 def wrapped(user_id):
-    personality_type = "LALALA"
-    personality_image = "../static/images/ENLC.png"
+    context = {
+       "user_id": user_id,
+       "personality_type": "The Voyager",
+       "first_trait": "Exploration",
+       "second_trait": "Newness",
+       "third_trait": "Loyalty",
+       "fourth_trait": "Commonality",
+    }    
 
-    return render_template('wrapped.html', user_id=user_id, personality_type=personality_type, personality_image=personality_image)
+    return render_template('wrapped.html', **context)
 
 app.run(debug=True)
