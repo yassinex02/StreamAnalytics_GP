@@ -6,7 +6,7 @@ from fastavro import writer
 import numpy as np
 import pandas as pd
 
-from serializer import get_parsed_track_schema, get_parsed_user_schema, \
+from simulation.serializer import get_parsed_track_schema, get_parsed_user_schema, \
     get_parsed_event_schema, get_parsed_artist_schema
 from simulation_objects import User
 from transformation import transform_main
