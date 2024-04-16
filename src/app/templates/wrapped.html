@@ -20,6 +20,66 @@
                 {% endfor %}
             </ul>
         </div>
+
+        <h3 style="margin-top: 20px;">This current...</h3>
+        <div id="analyticsButtons" style="margin-top: 0px;">
+            <button id="weeklyButton" class="button">Week</button>
+            <button id="monthlyButton" class="button">Month</button>
+        </div>
+        <div id="weeklyUserAnalytics" style="display: none;">
+            <p>you have played {{ total_listens_week }} tracks, for a total of {{ total_listening_time_week }} hours.</p>
+            <p>You played this song ON REPEAT:</p>
+            <h3>{{ top_song_week }}</h3>
+            <p>And you were in the {{ percentile_week }} of listeners.</p>
+            <br>
+            <p>Your top 5 Songs for the period were:</p>
+            <ul>
+                {% for song in top_5_week %}
+                <li>- {{ song }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div id="monthlyUserAnalytics" style="display: none;">
+            <p>you have played {{ total_listens_month }} tracks, for a total of {{ total_listening_time_month }} hours.</p>
+            <p>You played this song ON REPEAT:</p>
+            <h3>{{ top_song_month }}</h3>
+            <p>And you were in the {{ percentile_month }} of listeners.</p>
+            <br>
+            <p>Your top 5 Songs for the period were:</p>
+            <ul>
+                {% for song in top_5_month %}
+                <li>- {{ song }}</li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
+
+    <script>
+        var weeklyButton = document.getElementById('weeklyButton');
+        var monthlyButton = document.getElementById('monthlyButton');
+        var weeklyUserAnalytics = document.getElementById('weeklyUserAnalytics');
+        var monthlyUserAnalytics = document.getElementById('monthlyUserAnalytics');
+
+        weeklyButton.addEventListener('click', function() {
+            weeklyUserAnalytics.style.display = 'block';
+            monthlyUserAnalytics.style.display = 'none';
+            weeklyButton.classList.add('active');
+            monthlyButton.classList.remove('active');
+            weeklyButton.disabled = true;
+            monthlyButton.disabled = false;
+        });
+
+        monthlyButton.addEventListener('click', function() {
+            weeklyUserAnalytics.style.display = 'none';
+            monthlyUserAnalytics.style.display = 'block';
+            monthlyButton.classList.add('active');
+            weeklyButton.classList.remove('active');
+            monthlyButton.disabled = true;
+            weeklyButton.disabled = false;
+        });
+    </script>
+
+    
 </body>
 </html>

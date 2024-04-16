@@ -24,7 +24,17 @@ def wrapped(user_id):
     context = {
        "user_id": user_id,
        "personality_type": "The Voyager",
-       "personality_traits": ["Exploration", "Newness", "Loyalty", "Commonality"]
+       "personality_traits": ["Exploration", "Newness", "Loyalty", "Commonality"],
+       "total_listens_week": 400,
+       "total_listening_time_week": 40,
+       "total_listens_month": 400,
+       "total_listening_time_month": 40,
+       "top_song_week": "FEARLESS",
+       "percentile_week": "Top 1%",
+       "top_song_month": "You are my Sunshine",
+       "percentile_month": "Top 1%",
+       "top_5_week": ["Song1", "Song2", "Song3", "Song4", "Song5"],
+       "top_5_month": ["Track1", "Track2", "Track3", "Track4", "Track5"]
     }    
 
     return render_template('wrapped.html', **context)
